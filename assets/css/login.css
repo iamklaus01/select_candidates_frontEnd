@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  /* ===== Variables =====  252631*/
+  --main-color : #304767;
+  --secondary-color: #23468c;
+  --light-color: #ff5f2f;
+  --fade-color: #4f6581;
+  --smoke: whitesmoke;
+  --gold-color : #fbb900;
+  --success: #198754;
+  --danger: #dc3545;
+  --color-dark: #212529;
+  --color-white: #fff;
+  --text-gray: #8390a2;
+
+  --cursive-font: "Playball" , cursive;
+
+  --sidebar-color: #212529;
+  --sidebar-active: #23468c;
+  --sidebar-active-hover: #50505a;
+
+  --border-color: #ccc;
+  --main-background: #f1f5f9;
+
+  --sidebar-width: 14rem;
+  --sidebar-width-check: 5rem;
+
+  --box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background-color: silver;
+    box-sizing: border-box;
+}
+.container{
+    position: relative;
+    width: 70vw;
+    height: 25rem;
+    display: inline-flex;
+}
+.back-box{  
+    display: inline-flex;
+    position: absolute;
+    width: 100%;
+    height: 80%;
+    transform: translate(0,-50%);
+    top:50%;
+    border-radius: .2rem;
+    background-color: var(--color-dark);
+}
+
+.front-box{
+    height: 100%;
+    width: 50%;
+    position: absolute;
+    right:0;
+    margin-left: 3rem;
+    margin-right: 1.9rem;
+    border-radius: .5rem;
+    z-index: 10;
+    background-color: var(--color-white);
+    transition: right .8s ease-in-out;
+}
+
+.login-msg, .signup-msg{
+    width: 50%;
+    height: 100%;
+    font-size: 15px;
+}
+
+.login-msg, .signup-msg{
+    transition: opacity .8s ease-in-out;
+}
+
+.login-msg .title,
+.signup-msg .title{
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.login-msg button,
+.signup-msg button {
+    font-size: 14px;
+    color:var(--color-white);
+    margin-top: 1.5rem;
+    padding:.5rem 1rem;
+    border-radius: .2rem;
+    border: none;
+    background-color: cornflowerblue;
+    cursor: pointer;
+}
+
+.text-content{
+    color:white;
+    margin-top:2rem;
+    margin-left: 3rem;
+    word-wrap: break-word;
+}
+.text-content h1{
+    margin-bottom:2rem;
+    display: inline-flex;
+    align-items: center;
+    font-size: 2rem;
+}
+.text-content h1 span{
+    font-size: 3rem;
+    color: cornflowerblue;
+}
+.text-content p{
+    font-size: 14px;
+}
+
+/*=====  front box content =====*/
+.login, .signup{
+    padding: 1rem;
+    text-align: center;
+}
+
+.login h2,
+.signup h2 {
+    color: var(--color-dark);
+    font-size:22px;
+}
+
+.input-box{
+    margin-top:2rem; 
+}
+
+.login input, 
+.signup input {
+    display: block;
+    width: 100%;
+    height: 2rem;
+    padding: .5rem 1rem;
+    background-color: transparent;
+    border-radius: .2rem;
+    border: 1px solid var(--text-gray);
+    margin-bottom:1.2rem;
+    font-size: 14px;
+}
+
+.login input:focus, 
+.signup input:focus {
+    border: 2px solid var(--text-gray) !important;
+}
+
+.login button,
+.signup button{
+    color:white;
+    font-size: 14px;
+    padding:.5rem 1rem;
+    border-radius: .2rem;
+    position: absolute;
+    right:2rem;
+    bottom: 2rem;
+    border: none;
+    background-color: var(--color-dark);
+    cursor: pointer;
+}
+.visibility{
+    opacity: 0;
+}
+.moving{
+    right:45%;
+}
+.hide{
+    display: none;
+}
+
+/* ===== Pop up styles ===== */
+#toast {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    right:0;
+    bottom: 2rem;
+    visibility: hidden;
+    max-width: 50vw;
+    width: auto;
+    height: auto;
+    margin: auto;
+    background-color: var(--color-white);
+    color: var(--color-dark);
+    text-align: center;
+    border-radius: .3rem;
+    z-index: 1;
+    font-size: 16px;
+}
+#toast .icone{
+    width: 50px;
+	height: 50px;
+    border-radius: 50%;
+    float: left;
+    padding: .5rem;
+    color: var(--color-white);
+}
+#toast .message{
+    padding: .4rem;
+}
+#toast.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 2s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 4s, fadeout 0.5s 4.5s;
+}
+.toast-error{
+    border-bottom: .2rem solid var(--danger);
+}
+.toast-error .icone{
+    background-color: var(--danger);
+    color: #fff;
+}
+
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 2rem; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 2rem; opacity: 1;}
+}
+
+@-webkit-keyframes expand {
+    from {min-width: 50px} 
+    to {min-width: 350px}
+}
+
+@keyframes expand {
+    from {min-width: 50px}
+    to {min-width: 350px}
+}
+
+@-webkit-keyframes stay {
+    from {min-width: 350px} 
+    to {min-width: 350px}
+}
+
+@keyframes stay {
+    from {min-width: 350px}
+    to {min-width: 350px}
+}
+@-webkit-keyframes shrink {
+    from {min-width: 350px;} 
+    to {min-width: 50px;}
+}
+
+@keyframes shrink {
+    from {min-width: 350px;} 
+    to {min-width: 50px;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 60px; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 60px; opacity: 0;}
+}
+
+@media (max-width:770px) {
+    .container{
+        width: 85vw;
+    }
+}
