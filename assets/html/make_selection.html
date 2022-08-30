@@ -1,0 +1,291 @@
+<div class="underline-title">
+    <p class="headline">Effectuer une opération de sélection</p>
+    <hr>
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-content">
+            <div class="left-side">
+                <div class="steps-content">
+                    <h3>Etape <span class="step-number">1</span></h3>
+                    <p class="step-number-content active">Uploader le fichier de données des candidats.</p>
+                    <p class="step-number-content d-none">Sélectionner les caractéristiques contraignables.</p>
+                    <p class="step-number-content d-none">Définissez vos critères sur chaque caractéristiques.</p>
+                    <p class="step-number-content d-none">Valider et lancer le traitement.</p>
+                </div>
+                <ul class="progress-bar">
+                    <li class="active">Upload</li>
+                    <li>Choix caractéristiques</li>
+                    <li>Définition des critères</li>
+                    <li>Validation</li>
+                </ul>
+            </div>
+            <div class="right-side">
+                <div class="main active">
+                    <div class="text">
+                        <h2>Upload</h2>
+                        <p>Uploader un fichier <code>.csv</code> ou <code>xlsx</code> qui renseigne les informations sur les candidats</p>
+                    </div>
+                    <div class="section-content  step-1">
+                        <form id="upload_form" class="upload_file" enctype="multipart/form-data">
+                            <div class="upload-input-container">
+                                <input id="c_file" type="file" required>
+                                <div class="input-help">
+                                    <div class="upload-icone">
+                                        <img src="../img/upload.svg" alt="Upload Icone" >
+                                    </div>
+                                    <p id="input_file_placeholder">Glissez-déposez vos fichiers ici ou cliquez sur la zone encadrée</p>
+                                </div>
+                            </div>
+                            <button class="submit-button-dark" type="submit">Valider</button>
+                        </form>
+                    </div>
+                    <div class="buttons">
+                        <button class="file_upload_next next_button">Suivant</button>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="text">
+                        <h2>Sélection des caractéritiques</h2>
+                        <p>Sélectionner les caractéristiques sur lesquelles vous voulez définir des critères.</p>
+                    </div>
+                    <div class="section-content  step-2">
+                        <div class="checkbox-list">
+                            <form id="select-feature">
+                                <div class="row space-between">
+                                    <div class="item">
+                                        <input name="feature_to_select" value="Value" type="checkbox">
+                                        <p>Caractéristique 1</p>
+                                      </div>
+                                      <div class="item">
+                                        <input name="feature_to_select" value="Value" type="checkbox">
+                                        <p>Caractéristique 2</p>
+                                      </div>
+                                      <div class="item">
+                                        <input name="feature_to_select" value="Value" type="checkbox">
+                                        <p>Caractéristique 3</p>
+                                      </div>
+                                </div>
+                                <button class="submit-button-dark" type="submit">Valider</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="buttons button_space">
+                        <button class="back_button">Retour</button>
+                        <button class="next_button">Suivant</button>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="text">
+                        <h2>Définition des critères de sélection</h2>
+                        <p>Définissez les critères de sélection des candidats.</p>
+                    </div>
+                    <div class="section-content  step-3">
+                        <div class="single-form">
+                            <div class="form-container">
+                                <form id="int-constraint-define">
+                                    <div id="int-constraints-forms">
+                                        <div class="feature-input" data-feature_id="">
+                                            <div class="feature-name">
+                                                <p># Feature Name</p>
+                                            </div>
+                                            <div class="int-input-container">
+                                                <div class="int-input" title="Le minimum pour cette caractéristique">
+                                                    <label for="feature_min">Min:</label>
+                                                    <input type="number" id="feature_min" value="18" min="18" max="40" name="feature_min" required>
+                                                </div>
+                                                <div class="int-input" title="Le maximum pour cette caractéristique">
+                                                    <label for="feature_max">Max:</label>
+                                                    <input type="number" id="feature_max" value="40" min="18" max="40" name="feature_max" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="feature-input" data-feature_id="">
+                                            <div class="feature-name">
+                                                <p># Feature Name</p>
+                                            </div>
+                                            <div class="int-input-container">
+                                                <div class="int-input" title="Le minimum pour cette caractéristique">
+                                                    <label for="feature_min">Min:</label>
+                                                    <input type="number" id="feature_min" value="18" min="18" max="40" name="feature_min" required>
+                                                </div>
+                                                <div class="int-input" title="Le maximum pour cette caractéristique">
+                                                    <label for="feature_max">Max:</label>
+                                                    <input type="number" id="feature_max" value="40" min="18" max="40" name="feature_max" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="enum-constraints-form">
+                                        <div class="enum-input-container">
+                                            <div class="feature-input" data-feature_id="">
+                                                <div class="feature-name">
+                                                    <p># Feature Name</p>
+                                                </div>
+                                                <div class="enum-input">
+                                                    <div class="feature-value">
+                                                        <p>Master</p>
+                                                    </div>
+                                                    <div class="input-select">
+                                                        <div class="select">
+                                                            <select id="main-metric" name="metric" onchange="show_option_for_enum()">
+                                                                <option value="lessThan">Au plus</option>
+                                                                <option value="moreThan">Au moins</option>
+                                                                <option value="equalTo">Exactement</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="number" id="feature_min" max="40" name="feature_min" required>
+                                                    </div>                                                
+                                                </div>
+                                                <div id="more-than-option" class="enum-input additional-option">
+                                                    <div class="feature-value">
+                                                        <p>Master</p>
+                                                    </div>
+                                                    <div class="input-select">
+                                                        <div class="select">
+                                                            <select name="metric-less">
+                                                                <option value="lessThan" disabled>Au plus</option>
+                                                                <option value="moreThan" selected>Au moins</option>
+                                                                <option value="equalTo" disabled>Exactement</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="number" id="feature_min" max="40" name="feature_min">
+                                                    </div>
+                                                </div>
+                                                <small class="indicator">( facultatif )</small>
+                                                <div id="less-than-option" class="enum-input additional-option">
+                                                    <div class="feature-value">
+                                                        <p>Master</p>
+                                                    </div>
+                                                    <div class="input-select">
+                                                        <div class="select">
+                                                            <select name="metric-more">
+                                                                <option value="lessThan" selected>Au plus</option>
+                                                                <option value="moreThan" disabled>Au moins</option>
+                                                                <option value="equalTo" disabled>Exactement</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="number" id="feature_min" min="18" max="40" name="feature_min">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                                                            
+                                        </div>
+                                    </div>
+                                    <button class="submit-button" type="submit">Valider</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons button_space">
+                        <button class="back_button">Retour</button>
+                        <button class="next_button">Suivant</button>
+                    </div>
+                </div>                      
+                <div class="main">
+                    <div class="text">
+                        <h2>Validation</h2>
+                        <p>Veuillez valider les critères définis puis lancer le traitement.</p>
+                    </div>
+                    <div class="section-content  step-4">
+                        <div class="validate-tables">
+                            <div class="underline-title">
+                                <p>Résumé des contraintes sur des valeurs entières</p>
+                                <hr>
+                            </div>
+                            <div class="table-container validate-int">
+                                <table class="responsive-table">
+                                    <caption></caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Caractéristiques</th>
+                                            <th>Minimum</th>
+                                            <th>Maximum</th>
+                                            </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Age</td>
+                                            <td>21</td>
+                                            <td>32</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Niveau Python</td>
+                                            <td>2</td>
+                                            <td>3</td>
+                                        </tr>                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-container validate-enum">
+                                <div class="underline-title">
+                                    <p>Résumé des contraintes sur des énumérations</p>
+                                    <hr>
+                                </div>
+                                <table class="responsive-table">
+                                    <caption></caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Caractéristiques</th>
+                                            <th>Valeur</th>
+                                            <th>Au moins</th>
+                                            <th>Au plus</th>
+                                            </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Genre</td>
+                                            <td>M</td>
+                                            <td>/</td>
+                                            <td>/</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Genre</td>
+                                            <td>F</td>
+                                            <td>3</td>
+                                            <td>/</td>
+                                        </tr>    
+                                        <tr>
+                                            <td>Diplôme</td>
+                                            <td>BAC</td>
+                                            <td>/</td>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Diplôme</td>
+                                            <td>Licence</td>
+                                            <td>/</td>
+                                            <td>/</td>
+                                        </tr>    
+                                        <tr>
+                                            <td>Diplôme</td>
+                                            <td>Master</td>
+                                            <td>2</td>
+                                            <td>/</td>
+                                        </tr>                              
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons button_space">
+                        <button class="next_button">Valider</button>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="text">
+                        <h2 class="final-step">Sélection des candidats</h2>
+                    </div>
+                    <div class="section-content step-5">
+                        <div class="loader">
+                            <span>{</span>&ensp;<code>Traitement ...</code>&ensp;<span class="odd-span">}</span>
+                        </div>
+                    </div>
+                    <div class="sub_steps-name">
+                        <p>Détermination des variables</p>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

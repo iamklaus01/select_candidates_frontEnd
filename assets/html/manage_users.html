@@ -1,0 +1,65 @@
+<div class="underline-title mt-4 mb-5">
+    <p class="headline">Gestion des utilisateurs</p>
+    <hr>
+</div>
+<div class="container-fluid">
+    <table class="table-list table-action">
+        <caption></caption>
+        <thead>
+            <tr>
+                <th class="t-small">N&deg;</th>
+                <th class="t-medium">Nom & Prénom(s)</th>
+                <th class="t-medium">Email</th>
+                <th class="t-medium">Date d'inscription</th>
+                <th class="t-medium">Status</th>
+                <th class="t-small">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>johndoe@gmail.com</td>
+                <td>27/07/2022</td>
+                <td class="t-active"><code>Active</code></td>
+                <td><i title="Archiver" class="user-delete fa fa-trash" aria-hidden="true"></i></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Mary Jane</td>
+                <td>maryjane@gmail.com</td>
+                <td>24/08/2022</td>
+                <td class="t-inactive"><code>Archivé</code></td>
+                <td><i title="Archiver" class="user-delete fa fa-trash" aria-hidden="true"></i></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="mt-5">
+        <form id="add-admin">
+            <h6 class="heading-small text-muted mb-4">Ajouter un administrateur</h6>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group focused">
+                        <label class="form-control-label" for="input-username">Nom & Prénom(s)</label>
+                        <input type="text" name="name" id="input-username" class="form-control form-control-alternative" placeholder="Nom & Prénom(s)" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                        <label class="form-control-label" for="input-email">Adresse email</label>
+                        <input type="email" name="email" id="input-email" class="form-control form-control-alternative" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                        <label class="form-control-label" for="input-pwd">Mot de passe</label>
+                        <input type="password" name="pwd" id="input-pwd" class="form-control form-control-alternative" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="add-admin-button" class="submit-button-dark" type="submit" disabled="disabled">Ajouter</button>
+        </form>
+    </div>
+</div>

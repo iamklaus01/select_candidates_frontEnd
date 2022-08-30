@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../vendor/fontawesome-6.1.2/css/all.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <title>Login | C-Elect</title>
+</head>
+<body>
+    <div id="toast" class="toast-error">
+        <div class="icone"><i aria-hidden="true" class="fa fa-triangle-exclamation"></i></div>
+        <div class="message">A notification message..</div>
+    </div>
+    <div class="container">
+        <div class="back-box">
+          <div class="login-msg">
+            <div class="text-content">
+                <h1><span>C</span> - Elect</h1>
+              <p class="title">Vous n'avez pas de compte ?</p>
+              <p>Créez-en un pour pouvoir bénéficier des services de cette plateforme.</p>
+              <button id="switch-1">S'inscrire</button>
+            </div>
+          </div>
+          <div class="signup-msg visibility">
+            <div class="text-content">
+                <h1><span>C</span> - Elect</h1>
+              <p class="title">Avez-vous déjà un compte ?</p>
+              <p>Connectez-vous pour bénéficier des services de cette plateforme</p>
+              <button id="switch-2">Se connecter</button>
+            </div>
+          </div>
+        </div>
+        <!-- backbox -->
+    
+        <div class="front-box">
+          <div class="login">
+            <h2>Connexion</h2>
+            <div class="input-box">
+              <form id="login">
+                <input type="log_email" name="email" placeholder="Votre adresse mail" required>
+                <input type="log_password" name="password" placeholder="Votre mot de passe" required>
+                <button type="submit">Se connecter</button>
+              </form>
+            </div>
+          </div>
+    
+          <div class="signup hide">
+            <h2>Création de compte</h2>
+            <div class="input-box">
+              <form id="sign_up">
+                <input type="text" name="fullname" placeholder="Votre nom et votre/vos prénom.s" required>
+                <input type="email" name="email" placeholder="Votre adresse mail" required>
+                <input type="password" name="password" placeholder="Votre mot de passe" required>
+                <input type="password" name="pwd_confirmed" placeholder="Confirmez votre mot de passe" required>
+                <button type="submit">S'inscrire</button>
+              </form>
+            </div>
+          </div>
+    
+        </div>
+        <!-- frontbox -->
+      </div>
+      <script type="module" src="../js/login.js"></script>
+</body>
+</html>

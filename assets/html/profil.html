@@ -1,0 +1,74 @@
+<div class="underline-title mt-4 mb-5">
+    <p class="headline">Profil utilisateur</p>
+    <hr>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+            <div class="card card-profile shadow">
+            <div class="row justify-content-center">
+                <div class="col-lg-3 order-lg-2">
+                    <div class="card-profile-image">
+                        <a href="#">
+                        <img src="../img/profile.png" alt="User Image" class="rounded-circle">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+                <div class="row">
+                <div class="col">
+                    <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                    <div>
+                        <span class="heading">4</span>
+                        <span class="description">Fichiers</span>
+                    </div>
+                    <div>
+                        <span class="heading">10</span>
+                        <span class="description">Solutions</span>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="text-center">
+                <h4>John Doe</h4>
+                <div>University of Computer Science</div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-xl-8 order-xl-1">
+            <div class="card bg-secondary shadow">
+            <div class="card-header bg-white border-0">
+                <div class="row align-items-center">
+                <div class="col-8">
+                    <h3 class="mb-0">Mon compte</h3>
+                </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="update_profile">
+                    <h6 class="heading-small text-muted mb-4">Information personnelles</h6>
+                    <div class="pl-lg-4">
+                        <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group focused">
+                            <label class="form-control-label" for="input-username">Nom & Prénom(s)</label>
+                            <input type="text" name="name" id="input-username" class="form-control form-control-alternative" placeholder="Nom & Prénom(s)" value="John Doe" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                            <label class="form-control-label" for="input-email">Adresse email</label>
+                            <input type="email" name="email" id="input-email" class="form-control form-control-alternative" value="johndoe@example.com" required>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <button class="submit-button-dark" type="submit" disabled="disabled">Modifier</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
