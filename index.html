@@ -4,136 +4,82 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./assets/style.css">
-        <title>Document</title>
+        <link rel="stylesheet" href="./assets/css/style.css">
+        <link rel="shortcut icon" href="./assets/img/favicon.ico" type="image/x-icon">
+        <title>Celect</title>
     </head>
     <body>
-        <div class="container">
-            <div class="card">
-                <div class="card-content">
-                    <div class="left-side">
-                        <div class="left-heading">
-                            <h3>Optmizer</h3>
+        <section id=timeline>
+            <h1>A Flexbox Timeline</h1>
+            <p class="leader">All cards must be the same height and width for space calculations on large screens.</p>
+            <div class="demo-card-wrapper">
+                <div class="demo-card demo-card--step1">
+                    <div class="head">
+                        <div class="number-box">
+                            <span>01</span>
                         </div>
-                        <div class="steps-content">
-                            <h3>Etape <span class="step-number">1</span></h3>
-                            <p class="step-number-content active">Uploader le fichier de données des candidats sous un format <code>.csv</code> ou <code>xlsx</code>.</p>
-                            <p class="step-number-content d-none">Vérifier et valider les caractéritiques ressorties</p>
-                            <p class="step-number-content d-none">Définissez vos critères sur chaque caractéristiques.</p>
-                            <p class="step-number-content d-none">Valider et lancer le traitement.</p>
-                        </div>
-                        <ul class="progress-bar">
-                            <li class="active">Upload</li>
-                            <li>Vérification des caractéristiques</li>
-                            <li>Définition des critères</li>
-                            <li>Validation</li>
-                        </ul>
+                        <h2><span class="small">Subtitle</span> Technology</h2>
                     </div>
-                    <div class="right-side">
-                        <div class="main active">
-                            <div class="text">
-                                <h2>Upload</h2>
-                                <p>Uploader un fichier <code>.csv</code> ou <code>xlsx</code> qui renseigne les informations sur les candidats</p>
-                            </div>
-                            <div class="main-content  step-1">
-                                <form action="" method="POST" enctype="multipart/form-data">
-                                    <input type="file" required>
-                                    <div class="input-help">
-                                        <div class="upload-icone">
-                                            <img src="./assets/img/upload.svg" alt="Upload Icone" >
-                                        </div>
-                                        <p>Glissez-déposez vos fichiers ici ou cliquez sur la zone encadrée</p>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="buttons">
-                                <button class="next_button">Suivant</button>
-                            </div>
-                        </div>
-                        <div class="main">
-                            <div class="text">
-                                <h2>Vérification des caractéristiques</h2>
-                                <p>Vérifier la conformité des caractéristiques et de leur type, puis, validez sinon annulez.</p>
-                            </div>
-                            <div class="main-content  step-2">
-                                <div class="table-container">
-                                    <table class="responsive-table">
-                                        <caption>Caractéristiques de sélection</caption>
-                                        <thead>
-                                            <tr>
-                                                <th>Libellé</th>
-                                                <th>Type de valeurs</th>
-                                                <th>Valeurs</th>
-                                              </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Age</td>
-                                                <td><code>Nombre entier</code></td>
-                                                <td>22 - 49</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Diplome</td>
-                                                <td><code>Enumération</code></td>
-                                                <td>BAC, Master ...</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Genre</td>
-                                                <td><code>Enumération</code></td>
-                                                <td>Masculin, Féminin ...</td>
-                                            </tr>                                           
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="buttons button_space">
-                                <button class="back_button">Retour</button>
-                                <button class="next_button">Suivant</button>
-                            </div>
-                        </div>
-                        <div class="main">
-                            <div class="text">
-                                <h2>Définition des critères de sélection</h2>
-                                <p>Définissez les critères de sélection des candidats.</p>
-                            </div>
-                            <div class="main-content  step-3">
-                                
-                            </div>
-                            <div class="buttons button_space">
-                                <button class="back_button">Retour</button>
-                                <button class="next_button">Suivant</button>
-                            </div>
-                        </div>                      
-                        <div class="main">
-                            <div class="text">
-                                <h2>Validation</h2>
-                                <p>Veuillez valider les critères définis puis lancer le traitement.</p>
-                            </div>
-                            <div class="main-content  step-4">
-                                
-                            </div>
-                            <div class="buttons button_space">
-                                <button class="back_button">Retour</button>
-                                <button class="next_button">Valider</button>
-                            </div>
-                        </div>
-                        <div class="main">
-                            <div class="text">
-                                <h2 class="final-step">Sélection des candidats</h2>
-                            </div>
-                            <div class="main-content step-5">
-                                <div class="loader">
-                                    <span>{</span>&ensp;<code>Traitement ...</code>&ensp;<span class="odd-span">}</span>
-                                </div>
-                            </div>
-                            <div class="sub_steps-name">
-                                <p>Détermination des variables</p>
-                            </div>    
-                        </div>
+                    <div class="body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <img src="./assets/img/header-bg.jpg" alt="Graphic">
                     </div>
                 </div>
+        
+                <div class="demo-card demo-card--step2">
+                    <div class="head">
+                        <div class="number-box">
+                            <span>02</span>
+                        </div>
+                        <h2><span class="small">Subtitle</span> Confidence</h2>
+                    </div>
+                    <div class="body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <img src="./assets/img/header-bg.jpg" alt="Graphic">
+                    </div>
+                </div>
+        
+                <div class="demo-card demo-card--step3">
+                    <div class="head">
+                        <div class="number-box">
+                            <span>03</span>
+                        </div>
+                        <h2><span class="small">Subtitle</span> Adaptation</h2>
+                    </div>
+                    <div class="body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <img src="./assets/img/header-bg.jpg" alt="Graphic">
+                    </div>
+                </div>
+        
+                <div class="demo-card demo-card--step4">
+                    <div class="head">
+                        <div class="number-box">
+                            <span>04</span>
+                        </div>
+                        <h2><span class="small">Subtitle</span> Consistency</h2>
+                    </div>
+                    <div class="body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <img src="./assets/img/header-bg.jpg" alt="Graphic">
+                    </div>
+                </div>
+        
+                <div class="demo-card demo-card--step5">
+                    <div class="head">
+                        <div class="number-box">
+                            <span>05</span>
+                        </div>
+                        <h2><span class="small">Subtitle</span> Conversion</h2>
+                    </div>
+                    <div class="body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <img src="./assets/img/header-bg.jpg" alt="Graphic">
+                    </div>
+                </div>
+            
             </div>
-        </div>
-        <script src="./assets/script.js"></script>
+        </section>
+        <script src="./assets/js/script.js"></script>
     </body>
 </html>
