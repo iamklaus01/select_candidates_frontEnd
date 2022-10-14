@@ -4,24 +4,61 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../vendor/fontawesome-6.1.2/css/all.min.css" crossorigin="anonymous" />
         <link rel="stylesheet" href="./assets/css/style.css">
         <link rel="shortcut icon" href="./assets/img/favicon.ico" type="image/x-icon">
         <title>Celect</title>
     </head>
     <body>
+        <header class="header">
+            <div class="logo">Application name</div>
+            <div class="menu"><a href="./assets/html/login-register.html">Connexion</a></div>
+        </header>
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-title">
+                    Application Name
+                </div>
+                <div class="hero-description">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi unde dolor, magnam itaque sit possimus nemo.</p>
+                </div>
+                <div class="hero-action-btn">
+                    <div class="action-btn btn-underline">
+                        <div class="underline"></div>
+                        <a href="./assets/html/login-register.html">Connexion</a>
+                    </div>
+                </div>
+            </div>
+            <div class="action-btn btn-slide">
+                <div class="dub-arrow">
+                    <a href="#timeline"><img src="./assets/img/ascending-letters.png" alt="" /></a>
+                </div>
+                <a class="btn-text" href="#timeline">Processus</a>
+            </div>
+        </div>
+        <section class="title-timeline">
+            <h2>Etapes du processus</h2>
+            <ul>
+                <li>Téléversement de fichiers</li>
+                <li>Choix caractéristiques</li>
+                <li>Définition critères de sélection</li>
+                <li>Validation</li>
+                <li>Visualisation résultats</li>
+              </ul>              
+        </section>
         <section id=timeline>
-            <h1>A Flexbox Timeline</h1>
-            <p class="leader">All cards must be the same height and width for space calculations on large screens.</p>
+            <h2>Processus de déroulement</h2>
+            <p class="leader">Le processus pour effectuer une sélection est résumé dans la timeline ci-dessus</p>
             <div class="demo-card-wrapper">
                 <div class="demo-card demo-card--step1">
                     <div class="head">
                         <div class="number-box">
                             <span>01</span>
                         </div>
-                        <h2><span class="small">Subtitle</span> Technology</h2>
+                        <h2>Connexion</h2>
                     </div>
                     <div class="body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <p>Inscrivez-vous sur la plateforme ou connectez-vous afin de bénéficier de toutes les fonctionnalités de celle-ci.</p>
                         <img src="./assets/img/header-bg.jpg" alt="Graphic">
                     </div>
                 </div>
@@ -31,10 +68,10 @@
                         <div class="number-box">
                             <span>02</span>
                         </div>
-                        <h2><span class="small">Subtitle</span> Confidence</h2>
+                        <h2>Upload</h2>
                     </div>
                     <div class="body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <p>Uploader un fichier <code>.csv</code> ou <code>xlsx</code> qui renseigne les informations sur les candidats.</p>
                         <img src="./assets/img/header-bg.jpg" alt="Graphic">
                     </div>
                 </div>
@@ -44,10 +81,10 @@
                         <div class="number-box">
                             <span>03</span>
                         </div>
-                        <h2><span class="small">Subtitle</span> Adaptation</h2>
+                        <h2>Choix caractéristiques</h2>
                     </div>
                     <div class="body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <p>Cochez la case devant chaque caractéristique pour la sélectionner afin d'y appliquer des critères. Toutes les caractérisqtiques ne sont pas contraignables.</p>
                         <img src="./assets/img/header-bg.jpg" alt="Graphic">
                     </div>
                 </div>
@@ -57,10 +94,10 @@
                         <div class="number-box">
                             <span>04</span>
                         </div>
-                        <h2><span class="small">Subtitle</span> Consistency</h2>
+                        <h2>Définition des critères de sélection</h2>
                     </div>
                     <div class="body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <p>Définissez les critères de sélection des candidats sur les caractéristiques sélectionnées à l'étape précédente.</p>
                         <img src="./assets/img/header-bg.jpg" alt="Graphic">
                     </div>
                 </div>
@@ -70,16 +107,47 @@
                         <div class="number-box">
                             <span>05</span>
                         </div>
-                        <h2><span class="small">Subtitle</span> Conversion</h2>
+                        <h2>Validation</h2>
                     </div>
                     <div class="body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta reiciendis deserunt doloribus consequatur, laudantium odio dolorum laboriosam.</p>
+                        <p>Un tableau résumant les critères définis à l'étape précédente vous est proposés(es). Veuillez vérifier les critères puis lancer le traitement.</p>
+                        <img src="./assets/img/header-bg.jpg" alt="Graphic">
+                    </div>
+                </div>
+                <div class="demo-card demo-card--step6">
+                    <div class="head">
+                        <div class="number-box">
+                            <span>06</span>
+                        </div>
+                        <h2>Visualisation</h2>
+                    </div>
+                    <div class="body">
+                        <p>Les résultatas du traitement sont visualisables. Si le statut de résolution est optimal, vous pouvez exportez ces résultats en fichier excel ou pdf.</p>
                         <img src="./assets/img/header-bg.jpg" alt="Graphic">
                     </div>
                 </div>
             
             </div>
         </section>
+        <section id="contact">
+            <div class="contact-box">
+                <div class="contact-img"></div>
+                <div class="contact-form-wrapper">
+                    <form>
+                    <div class="form-item">
+                        <input type="text" name="name" placeholder="Nom" required>
+                    </div>
+                    <div class="form-item">
+                        <input type="email" name="email" placeholder="Adresse email" required>
+                    </div>
+                    <div class="form-item">
+                        <textarea class="" name="message" placeholder="Contenu du message" required></textarea>
+                    </div>
+                    <button class="submit-btn">Envoyer</button>  
+                    </form>
+                </div>
+            </div>
+          </section>
         <script src="./assets/js/script.js"></script>
     </body>
 </html>
