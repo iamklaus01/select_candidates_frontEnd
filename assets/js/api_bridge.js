@@ -1,19 +1,20 @@
 import * as url from './routes_url.js'
 
-// Error classe
-class Error {
-    constructor(message, status) {
-        if(status == 500){
-            this.message = "Une erreur est survenue ! Veuillez réessayer ultérieurement. Si le problème persiste, contactez l'équipe de développement";
-        }else{
-            this.message = message
-        }
-        this.status = status;
-    }
+
+class CustomError {
+    constructor() {
+        this.message = "Une erreur est survenue! Réessayez ultérieurement";
+      }
+} 
+
+class RequestError {
+    constructor(message) {
+        this.message = message;
+      }
 } 
 
 
-function register(form){
+async function register(form){
     let form_data = new FormData(form);
     let header = new Headers();
 
@@ -23,20 +24,18 @@ function register(form){
         body: form_data,
         headers: header
     }
-    fetch(url.REGISTER_URL, params)
-    .then((response) =>{
-        if(response.ok)
-            return response.json
-    })
-    .then((data) =>{
-        return data;
-    })
-    .catch((e) =>{
-        throw new Error(e.status_code, e.detail);
-    })
+    try{
+        return await fetch(url.REGISTER_URL, params);
+    }catch(error){
+        if(error.detail){
+            throw new RequestError(error.detail);
+        }else{
+            throw new CustomError();
+        }
+    }
 }
 
-function log_user(email, pwd){
+async function log_user(email, pwd){
     let header = new Headers();
     
     let body_data = {
@@ -49,17 +48,18 @@ function log_user(email, pwd){
         mode: "cors",
         headers: header
     }
-    fetch(url.LOGIN_URL, params)
-    .then((response) =>{
-        if(response.ok)
-            return response.json
-    })
-    .then((data) =>{
-        return data;
-    })
-    .catch((e) =>{
-        throw new Error(e.status_code, e.detail);
-    })
+    try{
+        const response = await fetch(url.LOGIN_URL, params);
+        if(response.ok){
+            return response.json;
+        }
+    }catch(error){
+        if(error.detail){
+            throw new RequestError(error.detail);
+        }else{
+            throw new CustomError();
+        }
+    }
 }
 
 export {register, log_user}
