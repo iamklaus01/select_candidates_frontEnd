@@ -187,96 +187,92 @@ body {
 }
 
 /* ===== Pop up styles ===== */
-#toast {
+.banners-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+.banner {
+    color: white;
+    font-weight: 500;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.banner .banner-message {
+    flex: 1;
+    padding: 0 2rem;
+}
+.banner .banner-close {
     display: flex;
     align-items: center;
-    position: fixed;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.banner .banner-close:hover {
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.banner.success {
+    background: var(--success);
+}
+.banner.success::after {
+    /* background: #10c15c; */
+    background: var(--success);
+}
+.banner.error {
+    background: var(--danger);
+}
+.banner.error::after {
+    /* background: #ed1c24; */
+    background: var(--danger);
+}
+.banner::after {
+    content: "";
+    position: absolute;
+    height: 10rem;
+    width: 100%;
+    bottom: 100%;
     left: 0;
-    right:0;
-    bottom: 2rem;
-    visibility: hidden;
-    max-width: 50vw;
-    width: auto;
-    height: auto;
-    margin: auto;
-    background-color: var(--color-white);
-    color: var(--color-dark);
-    text-align: center;
-    border-radius: .3rem;
-    z-index: 1;
-    font-size: 16px;
 }
-#toast .icone{
-    width: 50px;
-	height: 50px;
-    border-radius: 50%;
-    float: left;
-    padding: .5rem;
-    color: var(--color-white);
+.banner:not(.visible) {
+    display: none;
+    transform: translateY(-100%);
 }
-#toast .message{
-    padding: .4rem;
-}
-#toast.show {
-    visibility: visible;
-    -webkit-animation: fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 2s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 4s, fadeout 0.5s 4.5s;
-}
-.toast-error{
-    border-bottom: .2rem solid var(--danger);
-}
-.toast-error .icone{
-    background-color: var(--danger);
-    color: #fff;
+.banner.visible {
+    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.12);
+    animation-name: banner-in;
+    animation-direction: forwards;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
 }
 
-@-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 2rem; opacity: 1;}
+@keyframes banner-in {
+    0% {
+        transform: translateY(-100%);
+    }
+    50% {
+        transform: translateY(10%);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
-
-@keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 2rem; opacity: 1;}
-}
-
-@-webkit-keyframes expand {
-    from {min-width: 50px} 
-    to {min-width: 350px}
-}
-
-@keyframes expand {
-    from {min-width: 50px}
-    to {min-width: 350px}
-}
-
-@-webkit-keyframes stay {
-    from {min-width: 350px} 
-    to {min-width: 350px}
-}
-
-@keyframes stay {
-    from {min-width: 350px}
-    to {min-width: 350px}
-}
-@-webkit-keyframes shrink {
-    from {min-width: 350px;} 
-    to {min-width: 50px;}
-}
-
-@keyframes shrink {
-    from {min-width: 350px;} 
-    to {min-width: 50px;}
-}
-
-@-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;} 
-    to {bottom: 60px; opacity: 0;}
-}
-
-@keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 60px; opacity: 0;}
+.show-banner {
+    appearance: none;
+    background: #ededed;
+    border: 0;
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
 }
 
 @media (max-width:770px) {
