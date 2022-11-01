@@ -1,6 +1,5 @@
 import * as url from './routes_url.js'
 
-
 class CustomError {
     constructor() {
         this.message = "Une erreur est survenue! Réessayez ultérieurement";
@@ -14,7 +13,7 @@ class RequestError {
 } 
 
 
-async function register(form){
+export async function register(form){
     let form_data = new FormData(form);
     let header = new Headers();
 
@@ -27,6 +26,7 @@ async function register(form){
     try{
         return await fetch(url.REGISTER_URL, params);
     }catch(error){
+        console.log(error)
         if(error.detail){
             throw new RequestError(error.detail);
         }else{
@@ -35,25 +35,148 @@ async function register(form){
     }
 }
 
-async function log_user(email, pwd){
-    let header = new Headers();
-    
-    let body_data = {
-        "email": email,
-        "password": pwd
-    };
+export async function log_user(email, pwd){
+    //let header = new Headers();
+    let header = {
+        'Access-Control-Allow-Origin': "*",
+        'Access-Control-Allow-Headers': "Content-Type",
+        'Content-type': "application/json"
+    }
+
+    let body_data = JSON.stringify({
+        email: email,
+        password: pwd
+    });
+
     let params = {
         method: "POST",
-        body: body_data,
         mode: "cors",
+        body: body_data,
         headers: header
     }
     try{
-        const response = await fetch(url.LOGIN_URL, params);
-        if(response.ok){
-            return response.json;
-        }
+        return await fetch(url.LOGIN_URL, params);
     }catch(error){
+        console.log(error);
+        if(error.detail){
+            console.log(error.detail);
+            throw new RequestError(error.detail);
+        }else{
+            throw new CustomError();
+        }
+    }
+}
+
+export async function logout(token){
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token)
+
+    let params = {
+        method: "POST",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.LOGOUT_URL, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function get_user_info(token, user_id) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token)
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.PROFILE_URL+"/"+user_id, params);
+    }catch(error){
+        console.log(error)
+    }
+    
+}
+
+export async function get_all_users(token, user_id) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token)
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.GET_ALL_USERS_URL+"/"+user_id, params);
+    }catch(error){
+        console.log(error)
+    }
+    
+}
+
+export async function get_user_files(token, user_id) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token)
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.GET_USER_FILES_URL+"/"+user_id, params);
+    }catch(error){
+        console.log(error)
+    }
+    
+}
+
+export async function get_system_stats(token, user_id) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token)
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.STATS_URL+"/"+user_id, params);
+    }catch(error){
+        console.log(error)
+    }
+    
+}
+
+
+export function is_authenticated(){
+    return (localStorage.getItem('user') == null) ? false : true;
+}
+
+export function is_admin() {
+    let user = JSON.parse(localStorage.getItem('user')) ;
+    return (user.role == "COMMON") ? false : true;
+}
+
+// Admin functions
+export async function register_admin(form, token){
+    let form_data = new FormData(form);
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token)
+
+    let params = {
+        method: "POST",
+        mode: "cors",
+        body: form_data,
+        headers: header
+    }
+    try{
+        return await fetch(url.CREATE_ADMIN_URL, params);
+    }catch(error){
+        console.log(error)
         if(error.detail){
             throw new RequestError(error.detail);
         }else{
@@ -62,4 +185,121 @@ async function log_user(email, pwd){
     }
 }
 
-export {register, log_user}
+export async function delete_account(user_id, email, pwd, token) {
+    let form_data = new FormData();
+    let header = new Headers();
+
+    form_data.append('user_id', user_id);
+    form_data.append('user_email', email);
+    form_data.append('pwd', pwd);
+    //header.append('Authorization', 'Bearer '+token)
+
+    let params = {
+        method: "DELETE",
+        mode: "cors",
+        body: form_data,
+        headers: header,
+        token : token
+    }
+    try{
+        return await fetch(url.DELETE_ACCOUNT_URL, params);
+    }catch(error){
+        console.log(error)
+        if(error.detail){
+            throw new RequestError(error.detail);
+        }else{
+            throw new CustomError();
+        }
+    }
+}
+
+//Make selection operation functions
+export async function upload_candidate_file(file, token, user_id){
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+    let form_data = new FormData();
+    form_data.append('c_file', file)
+    let params = {
+        method: "POST",
+        mode: "cors",
+        body: form_data,
+        headers: header,
+    }
+    try{
+        return await fetch( url.UPLOAD_FILE_URL +"/"+user_id, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function save_features(selected_features, cFile_id, token, user_id){
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+    header.append('Content-Type', "application/json");
+
+    let body_data = JSON.stringify({
+        features: selected_features,
+        c_file_id: cFile_id
+    });
+    let params = {
+        method: "POST",
+        mode: "cors",
+        body: body_data,
+        headers: header,
+    }
+    try{
+        return await fetch( url.SAVE_FEATURES_URL +"/"+user_id, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function get_details_on_int_features(c_file_id, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.GET_DETAILS_INT_FEATURES_URL +"/"+c_file_id, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function get_details_on_enum_features(c_file_id, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.GET_DETAILS_ENUM_FEATURES_URL +"/"+c_file_id, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function save_iconstraints(constraints, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+    header.append('Content-Type', "application/json");
+    
+    let params = {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify({data : constraints}),
+        headers: header,
+    }
+    try{
+        return await fetch( url.SAVE_INT_CONSTRAINTS_URL, params);
+    }catch(error){
+        console.log(error)
+    }
+}
