@@ -10,28 +10,14 @@
                 <th class="t-small">N&deg;</th>
                 <th class="t-medium">Nom & Prénom(s)</th>
                 <th class="t-medium">Email</th>
+                <th class="t-medium">Role</th>
                 <th class="t-medium">Date d'inscription</th>
                 <th class="t-medium">Status</th>
                 <th class="t-small">Action</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>johndoe@gmail.com</td>
-                <td>27/07/2022</td>
-                <td class="t-active"><code>Active</code></td>
-                <td><i title="Archiver" class="user-delete fa fa-trash" aria-hidden="true"></i></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Mary Jane</td>
-                <td>maryjane@gmail.com</td>
-                <td>24/08/2022</td>
-                <td class="t-inactive"><code>Archivé</code></td>
-                <td><i title="Archiver" class="user-delete fa fa-trash" aria-hidden="true"></i></td>
-            </tr>
+        <tbody id="all_users_tbody">
+           
         </tbody>
     </table>
     <div class="mt-5">
@@ -42,7 +28,7 @@
                     <div class="col-lg-6">
                         <div class="form-group focused">
                         <label class="form-control-label" for="input-username">Nom & Prénom(s)</label>
-                        <input type="text" name="name" id="input-username" class="form-control form-control-alternative" placeholder="Nom & Prénom(s)" required>
+                        <input type="text" name="fullname" id="input-username" class="form-control form-control-alternative" placeholder="Nom & Prénom(s)" required>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -54,12 +40,18 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                         <label class="form-control-label" for="input-pwd">Mot de passe</label>
-                        <input type="password" name="pwd" id="input-pwd" class="form-control form-control-alternative" required>
+                        <input type="password" name="password" id="input-pwd" class="form-control form-control-alternative" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                        <label class="form-control-label" for="input-c-pwd">Confirmer Mot de passe</label>
+                        <input type="password" name="pwd_confirmed" id="input-c-pwd" class="form-control form-control-alternative" required>
                         </div>
                     </div>
                 </div>
             </div>
-            <button id="add-admin-button" class="submit-button-dark" type="submit" disabled="disabled">Ajouter</button>
+            <button id="add-admin-button" class="submit-button-dark" type="submit">Ajouter</button>
         </form>
     </div>
 </div>
