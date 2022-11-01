@@ -11,6 +11,18 @@
     <title>Dashboard | CElect</title>
 </head>
     <body>
+        <div class="banners-container">
+            <div class="banner error">
+              <div class="banner-icon"><i class="fa fa-circle-exclamation" aria-hidden=True></i></div>
+              <div class="bad banner-message"></div>
+              <div class="banner-close"><i class="fa fa-xmark" aria-hidden="true"></i></div>
+            </div>
+            <div class="banner success">
+              <div class="banner-icon"><i class="fa-regular fa-thumbs-up" aria-hidden=True></i></div>
+              <div class="good banner-message"></div>
+              <div class="banner-close"><i class="fa fa-xmark" aria-hidden="true"></i></div>
+            </div>
+        </div>
         <input type="checkbox" id="nav-toggle">
         <!-- Sidebar -->
         <section class="sidebar">
@@ -24,25 +36,25 @@
             <div class="sidebar-menu">
                 <ul>
                     <li>
-                        <a href="#" class="active-link" data-content = 'home.html' data-js="" data-id=""> 
+                        <a href="#" class="active-link" data-content = 'home.html' data-js="" data-id="home"> 
                             <span><i class="fas fa-house-user" aria-hidden="true"></i> </span>
                             <span>Dashboard</span> 
                         </a>
                     </li>
                     <li>
-                        <a href="#"  data-content = 'profil.html' data-js="" data-id="">
+                        <a href="#"  data-content = 'profil.html' data-js="" data-id="profil">
                             <span><i class="fa fa-address-card" aria-hidden="true"></i> </span>
                             <span>Mon Profil</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#"  data-content = 'manage_users.html' data-js="" data-id="">
+                        <a href="#"  data-content = 'manage_users.html' data-js="" data-id="users">
                             <span><i class="fa fa-users" aria-hidden="true"></i> </span>
                             <span>Gestion Utilisateurs</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" data-content = 'user_files.html' data-js="" data-id="">
+                        <a href="#" data-content = 'user_files.html' data-js="" data-id="files">
                             <span><i class="fa fa-folder-tree" aria-hidden="true"></i> </span>
                             <span>Mes fichiers</span>
                         </a>
@@ -54,7 +66,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" data-content="" data-js="" data-id="">
+                        <a href="#" data-content="" data-js="" data-id="logout">
                             <span><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i> </span>
                             <span>Logout</span>
                         </a>
@@ -86,7 +98,7 @@
                 <div class="cards">
                     <div class="card-single">
                         <div>
-                            <h1>54</h1>
+                            <h1 id="stat_n_users">-</h1>
                             <span>Nombre d'utilisateurs</span>
                         </div>
                         <div>
@@ -96,7 +108,7 @@
                 
                     <div class="card-single">
                         <div>
-                            <h1>34</h1>
+                            <h1 id="stat_n_files">-</h1>
                             <span>Nombre de fichiers</span>
                         </div>
                         <div>
@@ -106,7 +118,7 @@
                 
                     <div class="card-single">
                         <div>
-                            <h1>234</h1>
+                            <h1 id="stat_n_sol">-</h1>
                             <span>Nombre d'opérations</span>
                         </div>
                         <div>
@@ -116,7 +128,7 @@
                 
                     <div class="card-single">
                         <div>
-                            <h1>93%</h1>
+                            <h1 id="stat_percent">-%</h1>
                             <span>Satisfaction</span>
                         </div>
                         <div>
@@ -127,7 +139,7 @@
             </main>
         </div> 
 
-        <script src="../js/dashboard.js"></script>   
-        <script src="../js/dashboard-content.js"></script>  
+        <script type="module" src="../js/dashboard.js"></script>   
+        <script type="module" src="../js/dashboard-content.js"></script>  
     </body>
 </html>
