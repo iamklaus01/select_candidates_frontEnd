@@ -1,23 +1,81 @@
+import * as user from './api_bridge.js';
+
+//Load system stats on redirection to dashboard after loging
+window.addEventListener('DOMContentLoaded', (event) => {
+    if (user.is_authenticated) {
+        let token = JSON.parse(localStorage.getItem('user')).token;
+        let user_id = JSON.parse(localStorage.getItem('user')).user_id;
+        go_to_dashboard_home(token, user_id);
+    } else {
+        notify(0, "Vous n'êtes pas connectés.es pour réaliser cette opération");
+        redirect_to("/index.html", 2000);
+    }
+});
+
+
 // Main section variable
 let main_section = document.getElementById('main-section') 
 
 // Active Link for sidebar menu
 let li_menus = document.querySelectorAll(".sidebar-menu ul li a");
 
+// Notification Box
+let success_notification_message = document.querySelector('.good.banner-message');
+let error_notification_message = document.querySelector('.bad.banner-message');
+let notification_close = document.querySelectorAll('.banner-close');
+
+// Notification banner management
+const showBanner = (selector) => {
+    hideBanners();
+    requestAnimationFrame(() => {
+      const banner = document.querySelector(selector);
+      banner.classList.add("visible");
+    });
+};
+  
+const hideBanners = () => {
+    document.querySelectorAll(".banner.visible")
+            .forEach((b) => b.classList.remove("visible"));
+};
+
+// Event added for x-mark button click for closing the notification banner
+[...notification_close].forEach((xmark) => xmark.addEventListener('click', function (){
+    hideBanners();
+}));
+
+function notify(type, message){
+    if(type){
+        success_notification_message.innerHTML = message;
+        showBanner(".banner.success")
+    }else{
+        error_notification_message.innerHTML = message;
+        showBanner(".banner.error");
+    }
+}
+
+function redirect_to(path, duration) {
+    setTimeout(()=>{
+        window.location.replace(path);
+    }, duration);
+}
+
 for(let a of li_menus){
     a.addEventListener('click', active_menu);
 }
 
-console.log(main_section.querySelectorAll('.cards'))
 
-
-function active_menu(e){
+async function active_menu(e){
     e.preventDefault();
     for(let a of li_menus){
         a.classList.remove('active-link');
     }
     e.currentTarget.classList.add('active-link');
 
+    manage_content(e);
+        
+}
+
+function manage_content(e) {
     let html_filename = e.currentTarget.dataset.content;
     let js_filename = e.currentTarget.dataset.js;
     let id = e.currentTarget.dataset.id;
@@ -27,8 +85,9 @@ function active_menu(e){
     if(js_filename != ""){
         load_js_file(js_filename, id)
     }
-}
+    get_data(id);
 
+}
 
 function include_html(filename) {
     filename = '../html/'+filename;
@@ -47,7 +106,7 @@ function load_js_file(file_url, id, async = true) {
   
     scriptEle.setAttribute("id", id);
     scriptEle.setAttribute("src", '../js/'+file_url);
-    scriptEle.setAttribute("type", "text/javascript");
+    scriptEle.setAttribute("type", "module");
     scriptEle.setAttribute("async", async);
     
     if(existing_script){
@@ -63,4 +122,232 @@ function load_js_file(file_url, id, async = true) {
     scriptEle.addEventListener("error", (ev) => {
       console.log("Error on loading file", ev);
     });
-  }
+}
+
+async function get_data(id) {
+    switch (id) {
+        case "home":{
+            if (user.is_authenticated) {
+                let token = JSON.parse(localStorage.getItem('user')).token;
+                let user_id = JSON.parse(localStorage.getItem('user')).user_id;
+                go_to_dashboard_home(token, user_id);
+            } else {
+                notify(0, "Vous n'êtes pas connectés.es pour réaliser cette opération");
+                redirect_to("/index.html", 2000);
+            }
+            break;
+        }
+        case "profil":{
+            if (user.is_authenticated()) {
+                let token = JSON.parse(localStorage.getItem('user')).token;
+                let user_id = JSON.parse(localStorage.getItem('user')).user_id;
+                go_to_profile(token, user_id);
+            } else {
+                notify(0, "Vous n'êtes pas connectés.es pour accéder à ce contenu !");
+                redirect_to("/index.html", 2000);
+            }
+            break;
+        }
+        case "users":{
+            if (user.is_admin()) {
+                let token = JSON.parse(localStorage.getItem('user')).token;
+                let user_id = JSON.parse(localStorage.getItem('user')).user_id;
+                go_to_users_management(token, user_id);
+            } else {
+                notify(0, "Vous n'êtes pas connectés.es pour accéder à ce contenu !");
+                redirect_to("/index.html", 2000);
+            }
+            break;
+        }
+        case "files":{
+            if (user.is_authenticated) {
+                let token = JSON.parse(localStorage.getItem('user')).token;
+                let user_id = JSON.parse(localStorage.getItem('user')).user_id;
+                go_to_user_files(token, user_id);
+            } else {
+                notify(0, "Vous n'êtes pas connectés.es pour réaliser cette opération");
+                redirect_to("/index.html", 2000);
+            }
+            break;
+        }
+        case "logout":{
+            if (user.is_authenticated) {
+                let token = JSON.parse(localStorage.getItem('user')).token;
+                logout(token);
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+async function go_to_profile(token, user_id) {
+    let response = await user.get_user_info(token, user_id)
+    if(response.ok){
+        let data = response.json();
+        data.then((profile)=>{
+            document.getElementById("username").innerText = profile.name;
+            document.getElementById("input-username").value = profile.name;
+            document.getElementById("input-email").value = profile.email;
+            document.getElementById("n_files").innerText = profile.n_files;
+            document.getElementById("n_sol").innerText = profile.n_sol;
+        });
+    }else{
+        if (response.status == 403) {
+            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            localStorage.removeItem('user');
+            redirect_to("/index.html", 2000);
+        }else{
+            notify(0, "Une erreur est survenue... Veuillez réessayer!");
+        }
+    }
+}
+
+async function go_to_users_management(token, user_id){
+    let response = await user.get_all_users(token, user_id)
+    if(response.ok){
+        let data = response.json();
+        data.then((all_users)=>{
+            fill_data(all_users);
+        });
+    }else{
+        if (response.status == 403) {
+            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            localStorage.removeItem('user');
+            redirect_to("/index.html", 2000);
+        }else if(response.status == 401){
+            notify(0, "Vous n'êtes pas autorisé(e)s à réaliser une telle opération !");
+        }
+        else{
+            notify(0, "Une erreur est survenue... Veuillez réessayer!");
+        }
+    }
+}
+
+async function go_to_user_files(token, user_id){
+    let response = await user.get_user_files(token, user_id)
+    if(response.ok){
+        let data = response.json();
+        data.then((files)=>{
+            fill_files_table(files);
+        });
+    }else{
+        if (response.status == 403) {
+            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            localStorage.removeItem('user');
+            redirect_to("/index.html", 2000);
+        }else if(response.status == 404){
+            notify(0, "Les coordonnées de cet utilisateur ne correspondent à aucun enregistré !");
+        }
+        else{
+            notify(0, "Une erreur est survenue... Veuillez réessayer!");
+        }
+    }
+}
+
+async function go_to_dashboard_home(token, user_id) {
+    let response = await user.get_system_stats(token, user_id)
+    if(response.ok){
+        let data = response.json();
+        data.then((stats)=>{
+            set_user_info();
+            set_system_stats(stats);
+        });
+    }else{
+        if (response.status == 403) {
+            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            localStorage.removeItem('user');
+            redirect_to("/index.html", 2000);
+        }else if(response.status == 404){
+            notify(0, "Les coordonnées de cet utilisateur ne correspondent à aucun enregistré !");
+        }
+    }
+}
+
+async function logout(token) {
+    let response = await user.logout(token)
+    if(response.ok){
+        notify(1, "Déconnexion effectuée avec succès");
+        localStorage.removeItem('user');
+        redirect_to("/index.html", 2000);
+    }else{
+        if (response.status == 403) {
+            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            localStorage.removeItem('user');
+            redirect_to("/index.html", 2000);
+        }else{
+            notify(0, "Une erreur est survenue... Veuillez réessayer!");
+        }
+    }
+}
+
+function fill_data(all_users) {
+    let users_tbody = document.getElementById('all_users_tbody');
+    let user_status = "Actif(ve)";
+    let classname = "t-active";
+    all_users.forEach(function (user, index){
+        if(user.active){
+            user_status = "Actif(ve)";
+            classname = "t-active";
+        }else{
+            user_status = "Archivé(e)";
+            classname = "t-inactive"
+        }
+        
+        users_tbody.innerHTML += `
+        <tr>
+            <td>`+(index+1)+`</td>
+            <td>`+user.name+`</td>
+            <td>`+user.email+`</td>
+            <td><code>`+user.role+` USER</code></td>
+            <td>`+user.created_at.split('T')[0]+`</td>
+            <td class=`+classname+` ><code>`+user_status+`</code></td>
+            <td><i title="Archiver" class="user-delete fa fa-trash" aria-hidden="true"></i></td>
+        </tr> `;
+    });
+}
+
+function fill_files_table(files) {
+    let files_tbody = document.getElementById('user_files_tbody');
+    let fileType_class = "fa-file-csv";
+    let status_class = "t-active";
+    files.forEach(function (file, index){
+        if(file.extension == "csv"){
+            fileType_class = "fa-file-csv";
+        }else{
+            fileType_class = "fa-file-excel"
+        }
+        status_class = (file.status == "OPTIMAL") ? "t-active" : "t-inactive"
+        let res_status = (file.status == undefined) ? "-" : file.status
+        let nbre_sol = (file.nbe_sol == undefined) ? "-" : file.nbe_sol
+        
+        files_tbody.innerHTML += `
+        <tr>
+            <td>`+(index+1)+`</td>
+            <td><i title="Type du fichier problème" class="file-type fa `+fileType_class+`" aria-hidden="true"></i></td>
+            <td><code>`+file.path.split("/")[2]+`</code></td>
+            <td class="`+status_class+`"><code>`+res_status+`</code></td>
+            <td><code>`+nbre_sol+`</code></td>
+            <td>
+                <div class="row space-between">
+                    <i title="Télécharger" class="download-file fa fa-download" aria-hidden="true"></i>
+                    <i title="Supprimer" class="user-delete fa fa-trash" aria-hidden="true"></i>
+                </div>
+            </td>
+        </tr> `;
+    });
+}
+
+function set_system_stats(stats) {
+    let percent = (stats.percent == null) ? "-" : stats.percent;
+    document.getElementById('stat_n_users').innerText = stats.n_users;
+    document.getElementById('stat_n_files').innerText = stats.n_files;
+    document.getElementById('stat_n_sol').innerText = stats.n_sol;
+    document.getElementById('stat_percent').innerText = percent;
+    
+}
+function set_user_info() {
+    document.getElementById('user-name').innerText = JSON.parse(localStorage.getItem('user')).username;
+    document.getElementById('user-role').innerText = JSON.parse(localStorage.getItem('user')).role;
+}
