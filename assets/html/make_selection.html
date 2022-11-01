@@ -29,7 +29,7 @@
                     <div class="section-content  step-1">
                         <form id="upload_form" class="upload_file" enctype="multipart/form-data">
                             <div class="upload-input-container">
-                                <input id="c_file" type="file" required>
+                                <input id="c_file" type="file" name="c_file" required>
                                 <div class="input-help">
                                     <div class="upload-icone">
                                         <img src="../img/upload.svg" alt="Upload Icone" >
@@ -41,7 +41,7 @@
                         </form>
                     </div>
                     <div class="buttons">
-                        <button class="file_upload_next next_button">Suivant</button>
+                        <button id="file_upload_next" class="next_button">Suivant</button>
                     </div>
                 </div>
                 <div class="main">
@@ -52,21 +52,10 @@
                     <div class="section-content  step-2">
                         <div class="checkbox-list">
                             <form id="select-feature">
-                                <div class="row space-between">
-                                    <div class="item">
-                                        <input name="feature_to_select" value="Value" type="checkbox">
-                                        <p>Caractéristique 1</p>
-                                      </div>
-                                      <div class="item">
-                                        <input name="feature_to_select" value="Value" type="checkbox">
-                                        <p>Caractéristique 2</p>
-                                      </div>
-                                      <div class="item">
-                                        <input name="feature_to_select" value="Value" type="checkbox">
-                                        <p>Caractéristique 3</p>
-                                      </div>
+                                <div id="list_features" class="row space-between">
+                                    
                                 </div>
-                                <button class="submit-button-dark" type="submit">Valider</button>
+                                <button id="validate-f-select" class="submit-button-dark" type="submit">Valider</button>
                             </form>
                         </div>
                     </div>
@@ -84,93 +73,14 @@
                         <div class="single-form">
                             <div class="form-container">
                                 <form id="int-constraint-define">
-                                    <div id="int-constraints-forms">
-                                        <div class="feature-input" data-feature_id="">
-                                            <div class="feature-name">
-                                                <p># Feature Name</p>
-                                            </div>
-                                            <div class="int-input-container">
-                                                <div class="int-input" title="Le minimum pour cette caractéristique">
-                                                    <label for="feature_min">Min:</label>
-                                                    <input type="number" id="feature_min" value="18" min="18" max="40" name="feature_min" required>
-                                                </div>
-                                                <div class="int-input" title="Le maximum pour cette caractéristique">
-                                                    <label for="feature_max">Max:</label>
-                                                    <input type="number" id="feature_max" value="40" min="18" max="40" name="feature_max" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="feature-input" data-feature_id="">
-                                            <div class="feature-name">
-                                                <p># Feature Name</p>
-                                            </div>
-                                            <div class="int-input-container">
-                                                <div class="int-input" title="Le minimum pour cette caractéristique">
-                                                    <label for="feature_min">Min:</label>
-                                                    <input type="number" id="feature_min" value="18" min="18" max="40" name="feature_min" required>
-                                                </div>
-                                                <div class="int-input" title="Le maximum pour cette caractéristique">
-                                                    <label for="feature_max">Max:</label>
-                                                    <input type="number" id="feature_max" value="40" min="18" max="40" name="feature_max" required>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div id="constraints-forms">
+                                        
                                     </div>
-                                    <div id="enum-constraints-form">
-                                        <div class="enum-input-container">
-                                            <div class="feature-input" data-feature_id="">
-                                                <div class="feature-name">
-                                                    <p># Feature Name</p>
-                                                </div>
-                                                <div class="enum-input">
-                                                    <div class="feature-value">
-                                                        <p>Master</p>
-                                                    </div>
-                                                    <div class="input-select">
-                                                        <div class="select">
-                                                            <select id="main-metric" name="metric" onchange="show_option_for_enum()">
-                                                                <option value="lessThan">Au plus</option>
-                                                                <option value="moreThan">Au moins</option>
-                                                                <option value="equalTo">Exactement</option>
-                                                            </select>
-                                                        </div>
-                                                        <input type="number" id="feature_min" max="40" name="feature_min" required>
-                                                    </div>                                                
-                                                </div>
-                                                <div id="more-than-option" class="enum-input additional-option">
-                                                    <div class="feature-value">
-                                                        <p>Master</p>
-                                                    </div>
-                                                    <div class="input-select">
-                                                        <div class="select">
-                                                            <select name="metric-less">
-                                                                <option value="lessThan" disabled>Au plus</option>
-                                                                <option value="moreThan" selected>Au moins</option>
-                                                                <option value="equalTo" disabled>Exactement</option>
-                                                            </select>
-                                                        </div>
-                                                        <input type="number" id="feature_min" max="40" name="feature_min">
-                                                    </div>
-                                                </div>
-                                                <small class="indicator">( facultatif )</small>
-                                                <div id="less-than-option" class="enum-input additional-option">
-                                                    <div class="feature-value">
-                                                        <p>Master</p>
-                                                    </div>
-                                                    <div class="input-select">
-                                                        <div class="select">
-                                                            <select name="metric-more">
-                                                                <option value="lessThan" selected>Au plus</option>
-                                                                <option value="moreThan" disabled>Au moins</option>
-                                                                <option value="equalTo" disabled>Exactement</option>
-                                                            </select>
-                                                        </div>
-                                                        <input type="number" id="feature_min" min="18" max="40" name="feature_min">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                                                                            
-                                        </div>
+                                    <button class="submit-button" type="submit">Valider</button>
+                                </form>
+                                <form id="enum-constraint-define">
+                                    <div id="constraints-forms">
+                                        OHLALA
                                     </div>
                                     <button class="submit-button" type="submit">Valider</button>
                                 </form>
@@ -178,7 +88,6 @@
                         </div>
                     </div>
                     <div class="buttons button_space">
-                        <button class="back_button">Retour</button>
                         <button class="next_button">Suivant</button>
                     </div>
                 </div>                      
