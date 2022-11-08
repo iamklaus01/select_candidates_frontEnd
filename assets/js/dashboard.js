@@ -7,7 +7,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         let user_id = JSON.parse(localStorage.getItem('user')).user_id;
         go_to_dashboard_home(token, user_id);
     } else {
-        notify(0, "Vous n'êtes pas connectés.es pour réaliser cette opération");
+        notify(0, "You are not logged in to perform this operation... Please log in first !");
         redirect_to("/index.html", 2000);
     }
 });
@@ -63,7 +63,6 @@ for(let a of li_menus){
     a.addEventListener('click', active_menu);
 }
 
-
 async function active_menu(e){
     e.preventDefault();
     for(let a of li_menus){
@@ -72,7 +71,6 @@ async function active_menu(e){
     e.currentTarget.classList.add('active-link');
 
     manage_content(e);
-        
 }
 
 function manage_content(e) {
@@ -86,7 +84,6 @@ function manage_content(e) {
         load_js_file(js_filename, id)
     }
     get_data(id);
-
 }
 
 function include_html(filename) {
@@ -98,7 +95,6 @@ function include_html(filename) {
     })
     .catch(e => console.log("Error" + e));
 }
-
 
 function load_js_file(file_url, id, async = true) {
     let scriptEle = document.createElement("script");
@@ -132,18 +128,18 @@ async function get_data(id) {
                 let user_id = JSON.parse(localStorage.getItem('user')).user_id;
                 go_to_dashboard_home(token, user_id);
             } else {
-                notify(0, "Vous n'êtes pas connectés.es pour réaliser cette opération");
+                notify(0, "You are not logged in to perform this operation... Please log in first !");
                 redirect_to("/index.html", 2000);
             }
             break;
         }
-        case "profil":{
+        case "profile":{
             if (user.is_authenticated()) {
                 let token = JSON.parse(localStorage.getItem('user')).token;
                 let user_id = JSON.parse(localStorage.getItem('user')).user_id;
                 go_to_profile(token, user_id);
             } else {
-                notify(0, "Vous n'êtes pas connectés.es pour accéder à ce contenu !");
+                notify(0, "You are not logged in to view this content... Please log in first!");
                 redirect_to("/index.html", 2000);
             }
             break;
@@ -154,7 +150,7 @@ async function get_data(id) {
                 let user_id = JSON.parse(localStorage.getItem('user')).user_id;
                 go_to_users_management(token, user_id);
             } else {
-                notify(0, "Vous n'êtes pas connectés.es pour accéder à ce contenu !");
+                notify(0, "You are not logged in to view this content... Please log in first!");
                 redirect_to("/index.html", 2000);
             }
             break;
@@ -165,7 +161,7 @@ async function get_data(id) {
                 let user_id = JSON.parse(localStorage.getItem('user')).user_id;
                 go_to_user_files(token, user_id);
             } else {
-                notify(0, "Vous n'êtes pas connectés.es pour réaliser cette opération");
+                notify(0, "You are not logged in to perform this operation... Please log in first !");
                 redirect_to("/index.html", 2000);
             }
             break;
@@ -195,11 +191,11 @@ async function go_to_profile(token, user_id) {
         });
     }else{
         if (response.status == 403) {
-            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            notify(0, "You are no longer connected... The authentication token has already expired!");
             localStorage.removeItem('user');
             redirect_to("/index.html", 2000);
         }else{
-            notify(0, "Une erreur est survenue... Veuillez réessayer!");
+            notify(0, "An error has occurred. Please try again !");
         }
     }
 }
@@ -213,14 +209,14 @@ async function go_to_users_management(token, user_id){
         });
     }else{
         if (response.status == 403) {
-            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            notify(0, "You are no longer connected... The authentication token has already expired!");
             localStorage.removeItem('user');
             redirect_to("/index.html", 2000);
         }else if(response.status == 401){
-            notify(0, "Vous n'êtes pas autorisé(e)s à réaliser une telle opération !");
+            notify(0, "You are not authorized to perform such an operation !");
         }
         else{
-            notify(0, "Une erreur est survenue... Veuillez réessayer!");
+            notify(0, "An error has occurred. Please try again !");
         }
     }
 }
@@ -234,14 +230,14 @@ async function go_to_user_files(token, user_id){
         });
     }else{
         if (response.status == 403) {
-            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            notify(0, "You are no longer connected... The authentication token has already expired!");
             localStorage.removeItem('user');
             redirect_to("/index.html", 2000);
         }else if(response.status == 404){
-            notify(0, "Les coordonnées de cet utilisateur ne correspondent à aucun enregistré !");
+            notify(0, "The coordinates of this user do not correspond to any registered !");
         }
         else{
-            notify(0, "Une erreur est survenue... Veuillez réessayer!");
+            notify(0, "An error has occurred. Please try again !");
         }
     }
 }
@@ -256,11 +252,11 @@ async function go_to_dashboard_home(token, user_id) {
         });
     }else{
         if (response.status == 403) {
-            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            notify(0, "You are no longer connected... The authentication token has already expired!");
             localStorage.removeItem('user');
             redirect_to("/index.html", 2000);
         }else if(response.status == 404){
-            notify(0, "Les coordonnées de cet utilisateur ne correspondent à aucun enregistré !");
+            notify(0, "The coordinates of this user do not correspond to any registered !");
         }
     }
 }
@@ -268,30 +264,30 @@ async function go_to_dashboard_home(token, user_id) {
 async function logout(token) {
     let response = await user.logout(token)
     if(response.ok){
-        notify(1, "Déconnexion effectuée avec succès");
+        notify(1, "Successfully disconnected");
         localStorage.removeItem('user');
         redirect_to("/index.html", 2000);
     }else{
         if (response.status == 403) {
-            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            notify(0, "You are no longer connected... The authentication token has already expired!");
             localStorage.removeItem('user');
             redirect_to("/index.html", 2000);
         }else{
-            notify(0, "Une erreur est survenue... Veuillez réessayer!");
+            notify(0, "An error has occurred. Please try again !");
         }
     }
 }
 
 function fill_data(all_users) {
     let users_tbody = document.getElementById('all_users_tbody');
-    let user_status = "Actif(ve)";
+    let user_status = "Active";
     let classname = "t-active";
     all_users.forEach(function (user, index){
         if(user.active){
-            user_status = "Actif(ve)";
+            user_status = "Active";
             classname = "t-active";
         }else{
-            user_status = "Archivé(e)";
+            user_status = "Archived";
             classname = "t-inactive"
         }
         
@@ -303,7 +299,7 @@ function fill_data(all_users) {
             <td><code>`+user.role+` USER</code></td>
             <td>`+user.created_at.split('T')[0]+`</td>
             <td class=`+classname+` ><code>`+user_status+`</code></td>
-            <td><i title="Archiver" class="user-delete fa fa-trash" aria-hidden="true"></i></td>
+            <td><i title="Archive" class="user-delete fa fa-trash" aria-hidden="true"></i></td>
         </tr> `;
     });
 }
@@ -312,31 +308,36 @@ function fill_files_table(files) {
     let files_tbody = document.getElementById('user_files_tbody');
     let fileType_class = "fa-file-csv";
     let status_class = "t-active";
-    files.forEach(function (file, index){
-        if(file.extension == "csv"){
-            fileType_class = "fa-file-csv";
-        }else{
-            fileType_class = "fa-file-excel"
-        }
-        status_class = (file.status == "OPTIMAL") ? "t-active" : "t-inactive"
-        let res_status = (file.status == undefined) ? "-" : file.status
-        let nbre_sol = (file.nbe_sol == undefined) ? "-" : file.nbe_sol
-        
-        files_tbody.innerHTML += `
-        <tr>
-            <td>`+(index+1)+`</td>
-            <td><i title="Type du fichier problème" class="file-type fa `+fileType_class+`" aria-hidden="true"></i></td>
-            <td><code>`+file.path.split("/")[2]+`</code></td>
-            <td class="`+status_class+`"><code>`+res_status+`</code></td>
-            <td><code>`+nbre_sol+`</code></td>
-            <td>
-                <div class="row space-between">
-                    <i title="Télécharger" class="download-file fa fa-download" aria-hidden="true"></i>
-                    <i title="Supprimer" class="user-delete fa fa-trash" aria-hidden="true"></i>
-                </div>
-            </td>
-        </tr> `;
-    });
+    if(files.length == 0){
+        document.getElementById('no-files').innerHTML += `<p style="text-align:center;">No files</p>`
+    }else{
+        files.forEach(function (file, index){
+            if(file.extension == "csv"){
+                fileType_class = "fa-file-csv";
+            }else{
+                fileType_class = "fa-file-excel"
+            }
+            status_class = (file.status == "OPTIMAL") ? "t-active" : "t-inactive"
+            let res_status = (file.status == undefined) ? "-" : file.status
+            let nbre_sol = (file.nbe_sol == undefined) ? "-" : file.nbe_sol
+            
+            files_tbody.innerHTML += `
+            <tr>
+                <td>`+(index+1)+`</td>
+                <td><i title="Type of problem file" class="file-type fa `+fileType_class+`" aria-hidden="true"></i></td>
+                <td><code>`+file.path.split("/")[2]+`</code></td>
+                <td class="`+status_class+`"><code>`+res_status+`</code></td>
+                <td><code>`+nbre_sol+`</code></td>
+                <td>
+                    <div class="row space-between">
+                        <i title="Download" class="download-file fa fa-download" aria-hidden="true"></i>
+                        <i title="Delete" class="user-delete fa fa-trash" aria-hidden="true"></i>
+                    </div>
+                </td>
+            </tr> `;
+        });
+    }
+    
 }
 
 function set_system_stats(stats) {
@@ -347,6 +348,7 @@ function set_system_stats(stats) {
     document.getElementById('stat_percent').innerText = percent;
     
 }
+
 function set_user_info() {
     document.getElementById('user-name').innerText = JSON.parse(localStorage.getItem('user')).username;
     document.getElementById('user-role').innerText = JSON.parse(localStorage.getItem('user')).role;
