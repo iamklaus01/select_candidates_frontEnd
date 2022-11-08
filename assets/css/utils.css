@@ -357,3 +357,93 @@ button.bg-white:focus {
       order: 2;
     }
 }
+
+/* ===== Pop up styles ===== */
+.banners-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+.banner {
+  color: white;
+  font-weight: 500;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.banner .banner-message {
+  flex: 1;
+  padding: 0 2rem;
+}
+.banner .banner-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.banner .banner-close:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.banner.success {
+  background: var(--success);
+}
+.banner.success::after {
+  /* background: #10c15c; */
+  background: var(--success);
+}
+.banner.error {
+  background: var(--danger);
+}
+.banner.error::after {
+  /* background: #ed1c24; */
+  background: var(--danger);
+}
+.banner::after {
+  content: "";
+  position: absolute;
+  height: 10rem;
+  width: 100%;
+  bottom: 100%;
+  left: 0;
+}
+.banner:not(.visible) {
+  display: none;
+  transform: translateY(-100%);
+}
+.banner.visible {
+  box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.12);
+  animation-name: banner-in;
+  animation-direction: forwards;
+  animation-duration: 0.6s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
+
+@keyframes banner-in {
+  0% {
+      transform: translateY(-100%);
+  }
+  50% {
+      transform: translateY(10%);
+  }
+  100% {
+      transform: translateY(0);
+  }
+}
+.show-banner {
+  appearance: none;
+  background: #ededed;
+  border: 0;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
