@@ -2,7 +2,7 @@ import * as url from './routes_url.js'
 
 class CustomError {
     constructor() {
-        this.message = "Une erreur est survenue! Réessayez ultérieurement";
+        this.message = "An error has occured... Please try later !";
       }
 } 
 
@@ -100,6 +100,23 @@ export async function get_user_info(token, user_id) {
     
 }
 
+export async function update_user_info(token, user_id, form){
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token)
+    let form_data = new FormData(form);
+    let params = {
+        method: "PUT",
+        mode: "cors",
+        body:form_data,
+        headers: header,
+    }
+    try{
+        return await fetch( url.PROFILE_UPDATE_URL+"/"+user_id, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
 export async function get_all_users(token, user_id) {
     let header = new Headers();
     header.append('Authorization', 'Bearer '+token)
@@ -150,7 +167,6 @@ export async function get_system_stats(token, user_id) {
     }
     
 }
-
 
 export function is_authenticated(){
     return (localStorage.getItem('user') == null) ? false : true;
@@ -299,6 +315,56 @@ export async function save_iconstraints(constraints, token) {
     }
     try{
         return await fetch( url.SAVE_INT_CONSTRAINTS_URL, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function save_econstraints(constraints, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+    header.append('Content-Type', "application/json");
+    
+    let params = {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify({data : constraints}),
+        headers: header,
+    }
+    try{
+        return await fetch( url.SAVE_ENUM_CONSTRAINTS_URL, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function get_all_constraints(c_file_id, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.GET_ALL_CONSTRAINTS_URL +"/"+c_file_id, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function solve(c_file_id, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.SOLVE_URL +"/"+c_file_id, params);
     }catch(error){
         console.log(error)
     }
