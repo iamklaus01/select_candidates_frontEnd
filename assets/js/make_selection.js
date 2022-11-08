@@ -16,18 +16,21 @@ let backButton=document.querySelectorAll(".back_button");
 let stepNumber = document.querySelector(".step-number");
 let stepNumberContent=document.querySelectorAll(".step-number-content");
 
-let finalSubmit=document.querySelector(".submit_button");
+let final_button=document.getElementById("final_button");
+let validation_button=document.getElementById("validation_button");
 
-let selectMetric = document.getElementById('main-metric');
-let moreForm = document.getElementById('more-than-option');
-let lessForm = document.getElementById('less-than-option');
+let result_section = document.getElementById('main-result'); 
+let docDefinition;
+let pdf_download_btn = document.getElementById('btn-pdf-download'); 
+let excel_download_btn = document.getElementById('btn-excel-download'); 
 
 let actualStepNumber=0;
 let progressIntervalId;
 let iterator = 0
 
-const stepLabels = ["Implémentation du modèle", "Ajout des contraintes", "Détermination des solutions", "Impression du résultat"]
+const stepLabels = ["Implementing the model", "Adding constraints", "Determining solutions", "Printing the result"]
 let display_steps = document.querySelector(".sub_steps-name p")
+let last_section = document.getElementById("last-section")
 
 // Forms variable
 let uploadForm = document.getElementById("upload_form");
@@ -37,10 +40,23 @@ let input_file_placeholder = document.getElementById('input_file_placeholder');
 
 let int_constraints_form = document.getElementById("int-constraint-define");
 let enum_constraints_form = document.getElementById("enum-constraint-define");
+let limit_constraint_form = document.getElementById("limit-constraint-define");
+
+// Tables variables
+let validate_int = document.getElementById('validate-int');
+let validate_enum = document.getElementById('validate-enum');
+
+let end_constraints_btn = document.getElementById('end-constraints');
+let limit_btn = document.getElementById('limit_button');
 
 let upload_file_nextBtn = document.getElementById("file_upload_next");
 upload_file_nextBtn.style.display = "none"
 
+let all_enum_details = [];
+let enum_constraints_to_save = [];
+let actual_features_values = [];
+
+let limit_proposition = -1;
 // Add event listeners
 nextButton.forEach( (nextBtn) =>{
     nextBtn.addEventListener('click',() =>{
@@ -52,7 +68,6 @@ nextButton.forEach( (nextBtn) =>{
         progress_forward();
         contentchange();
         if(actualStepNumber==4){
-            console.log('Progressing starting')
             start_progressing()
         }
     });
@@ -67,17 +82,23 @@ backButton.forEach( (backBtn) => {
     });
 });
 
-uploadForm.addEventListener('submit', manage_file_uploaded);
-select_feature_form.addEventListener('submit', manage_features_selected);
+uploadForm.addEventListener('submit', manage_file_uploaded)
+select_feature_form.addEventListener('submit', manage_features_selected)
 int_constraints_form.addEventListener('submit', save_int_constraints)
-enum_constraints_form.addEventListener('submit', save_enum_constraints)
-
+enum_constraints_form.addEventListener('submit', get_enum_constraints)
+limit_constraint_form.addEventListener('submit', go_to_constraint_validation)
  inputFile.addEventListener('change', () =>{
      if(inputFile.files.length > 0) {
         let filename = inputFile.value.split(/[\\\/]+/).pop()
-        input_file_placeholder.innerHTML = "Le fichier <code>"+filename+"</code> est uploadé"
+        input_file_placeholder.innerHTML = "The file <code>"+filename+"</code> has been uploaded"
      }
  });
+
+final_button.addEventListener('click', launch_solving)
+validation_button.addEventListener('click', go_to_final_validation)
+
+pdf_download_btn.addEventListener('click', download_solutions_pdf)
+excel_download_btn.addEventListener('click', download_solutions_excel)
 
 const hideBanners = () => {
     document.querySelectorAll(".banner.visible")
@@ -111,7 +132,6 @@ function manage_features_selected(e) {
             })
         }
     }
-    console.log(selected_features);
     save_features(selected_features);
 }
  
@@ -153,34 +173,6 @@ function re_design(){
     document.querySelector(".right-side").style.width = "100%"
 }
 
-function show_option_for_enum(){
-    let option = selectMetric.options[selectMetric.selectedIndex].value
-    
-    if(option == "lessThan"){
-        moreForm.classList.remove('hide')
-        moreForm.classList.add('show')
-        lessForm.classList.remove('show')
-        lessForm.classList.add('hide')
-
-        document.querySelector('.indicator').style.display='block'
-    }
-    else if(option == "moreThan"){
-        lessForm.classList.remove('hide')
-        lessForm.classList.add('show')
-        moreForm.classList.remove('show')
-        moreForm.classList.add('hide')
-        document.querySelector('.indicator').style.display='block'
-    }
-    else{
-        moreForm.classList.remove('show')
-        lessForm.classList.remove('show')
-        moreForm.classList.add('hide')
-        lessForm.classList.add('hide')
-
-        document.querySelector('.indicator').style.display='none'
-    }
-}
-
 function validateform(){
     let validate=true;
     let validate_inputs=document.querySelectorAll(".main.active input");
@@ -209,7 +201,9 @@ function start_progressing(){
 }
 
 function stop_progressing(){
-    //
+    clearInterval(progressIntervalId);
+    display_steps.style.display = "none";
+    last_section.style.display = "none";
 }
 
 // Notification banner management
@@ -221,7 +215,6 @@ const showBanner = (selector) => {
     });
 };
   
-
 function notify(type, message){
     if(type){
         success_notification_message.innerHTML = message;
@@ -248,27 +241,28 @@ async function upload_file(file){
                 let data = response.json();
                 data.then((data)=>{
                     localStorage.setItem('features', JSON.stringify(data))
-                    input_file_placeholder.innerHTML = "Fichier uploadé"
-                    notify(1, "Fichier uploadé avec succès ! Cliquez sur Suivant pour continuer")
+                    input_file_placeholder.innerHTML = "File uploaded"
+                    notify(1, "File uploaded successfully! Click Next to continue")
                     fill_features(data.data);
                     upload_file_nextBtn.style.display = "block"
                 });
             }else{
                 if (response.status == 404) {
-                    notify(0, "Utilisateur non trouvé... Assurez-vous d'avoir créé un compte !")
+                    notify(0, "User not found... Make sure you have created an account!")
                 }else if(response.status == 403) {
-                    notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+                    notify(0, "You are no longer connected... The authentication token has already expired!");
                     localStorage.removeItem('user');
                     redirect_to("/index.html", 2000);
                 }else{
-                    notify(0, "Une erreur est survenue... Le fichier n'a pas pu être uploadé !")
+                    notify(0, "An error occurred... The file could not be uploaded !")
                 }
             }
         } catch (error) {
-            console.log(error.message);
+            notify(0, "An error has occured")
+            console.log(error);
         }
     } else {
-        notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+        notify(0, "You are no longer connected... The authentication token has already expired!");
         localStorage.removeItem('user');
         redirect_to("/index.html", 2000);
     }
@@ -285,36 +279,35 @@ async function save_features(features){
             if(response.ok){
                 let data = response.json();
                 data.then((data)=>{
-                    console.log(data)
                     manage_constraints_definition();
                     document.getElementById('validate-f-select').style.display="none";
-                    notify(1, "Caractéristiques sauvegardées avec succès ! Cliquez sur Suivant pour continuer")
+                    notify(1, "Features successfully saved! Click Next to continue")
 
                 });
             }else{
                 if (response.status == 404) {
-                    notify(0, "Utilisateur non trouvé... Assurez-vous d'avoir créé un compte !")
+                    notify(0, "User not found... Make sure you have created an account!")
                 }
                 else if(response.status == 403) {
-                    notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+                    notify(0, "You are no longer connected... The authentication token has already expired!");
                     localStorage.removeItem('user');
                     redirect_to("/index.html", 2000);
                 }else{
-                    notify(0, "Une erreur est survenue... Les caractéristiques n'ont pas pu être enregistrées !")
+                    notify(0, "An error has occurred... The features could not be saved!")
                 }
             }
         } catch (error) {
-            console.log(error.message);
+            notify(0, "An error has occured")
+            console.log(message);
         }
     } else {
-        notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+        notify(0, "You are no longer connected... The authentication token has already expired!");
         localStorage.removeItem('user');
         redirect_to("/index.html", 2000);
     }
 }
 
 async function save_int_constraints(e){
-    console.log('Submitted for int')
     e.preventDefault();
     if (user.is_authenticated()) {
         try {
@@ -324,45 +317,147 @@ async function save_int_constraints(e){
             if(response.ok){
                 let data = response.json();
                 data.then((data)=>{
-                    console.log(data)
                     int_constraints_form.style.display="none";
+                    notify(1, "First criteria successfully defined! Please continue!");
                     enum_constraints_form.style.display="block";
-                    notify(1, "Critères définis avec succès ! Veuillez continuer !")
+                    fill_details_enum_features();
                 });
             }else{
                 if(response.status == 403) {
-                    notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+                    notify(0, "You are no longer connected... The authentication token has already expired!");
                     localStorage.removeItem('user');
                     redirect_to("/index.html", 2000);
                 }else{
-                    notify(0, "Une erreur est survenue... Les critères n'ont pas pu être enregistrés !")
+                    notify(0, "An error has occurred... The criteria could not be saved !")
                 }
             }
         } catch (error) {
-            console.log(error.message);
+            notify(0, "An error has occured")
+            console.log(error);
         }
     } else {
-        notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+        notify(0, "You are no longer connected... The authentication token has already expired!");
+        localStorage.removeItem('user');
+        redirect_to("/index.html", 2000);
+    } 
+}
+
+async function save_enum_constraints() {
+    if (user.is_authenticated()) {
+        try {
+            let token = JSON.parse(localStorage.getItem('user')).token;
+            let response = await user.save_econstraints(enum_constraints_to_save, token)
+            if(response.ok){
+                let data = response.json();
+                data.then((data)=>{
+                    console.log(data)
+                    notify(1, "Criteria set successfully! Please click Next to continue !")
+                });
+            }else{
+                if(response.status == 403) {
+                    notify(0, "You are no longer connected... The authentication token has already expired!");
+                    localStorage.removeItem('user');
+                    redirect_to("/index.html", 2000);
+                }else{
+                    notify(0, "An error has occurred... The criteria could not be saved !")
+                }
+            }
+        } catch (error) {
+            notify(0, "An error has occured")
+            console.log(error);
+        }
+    } else {
+        notify(0, "You are no longer connected... The authentication token has already expired!");
         localStorage.removeItem('user');
         redirect_to("/index.html", 2000);
     }
 }
 
-async function save_enum_constraints(e) {
+async function go_to_constraint_validation(e) {
+    e.preventDefault();
+    limit_proposition = document.getElementById('limit-number').value;
+    notify(1, "Criteria successfully defined... Click next to proceed to their validation !");
+    limit_btn.style.display = "none";
+    try {
+        let token = JSON.parse(localStorage.getItem('user')).token;
+        let cFile_id = JSON.parse(localStorage.getItem('features')).c_file_id;
+        let response = await user.get_all_constraints(cFile_id, token)
+        if(response.ok){
+            let data = response.json();
+            data.then((data)=>{
+                console.log(data);
+                fill_details_for_validation(data);
+                end_constraints_btn.style.display = "block";
+                final_button.style.display = "none";
+            });
+        }else{
+            if (response.status == 404) {
+                notify(0, "File not found... !")
+            }
+            else if(response.status == 403) {
+                notify(0, "You are no longer connected... The authentication token has already expired!");
+                localStorage.removeItem('user');
+                redirect_to("/index.html", 2000);
+            }else{
+                notify(0, "An error has occured... !")
+            }
+        }
+    } catch (error) {
+        notify(0, "An error has occured")
+        console.log(message);
+    }
     
 }
 
+function go_to_final_validation(){
+    validate_int.style.display = "none";
+    validation_button.style.display = "none";
+    validate_enum.style.display = "block";
+    final_button.style.display = "block";
+
+    result_section.style.display = "none";
+}
+
+async function launch_solving(){
+    try {
+        let token = JSON.parse(localStorage.getItem('user')).token;
+        let cFile_id = JSON.parse(localStorage.getItem('features')).c_file_id;
+        let response = await user.solve(cFile_id, token);
+        if(response.ok){
+            let data = response.json();
+            data.then((data)=>{
+                console.log(data)
+                stop_progressing();
+                display_results(data);
+                notify(1, "Resolution completed successfully !")
+            });
+        }else{
+            if(response.status == 403) {
+                notify(0, "You are no longer connected... The authentication token has already expired!");
+                localStorage.removeItem('user');
+                redirect_to("/index.html", 2000);
+            }else{
+                notify(0, "An error has occured")
+            }
+        }
+    } catch (error) {
+        notify(0, "An error has occured")
+        console.log(error);
+    }
+}
 
 async function manage_constraints_definition() {
     try {
         let token = JSON.parse(localStorage.getItem('user')).token;
         let cFile_id = JSON.parse(localStorage.getItem('features')).c_file_id;
         enum_constraints_form.style.display = "none";
+        limit_constraint_form.style.display = "none";
+        end_constraints_btn.style.display = "none";
         manage_int_constraints_definition(cFile_id, token)
         manage_enum_constraints_definition(cFile_id, token)
         
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 }
 
@@ -371,19 +466,18 @@ async function manage_int_constraints_definition(cFile_id, token) {
     if(response.ok){
         let data = response.json();
         data.then((data)=>{
-            console.log(data)
             fill_details_int_features(data);
         });
     }else{
         if (response.status == 404) {
-            notify(0, "Caractéristiques introuvables ou non prises en compte.")
+            notify(0, "Features not found or not taken into account .")
         }
         else if(response.status == 403) {
-            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            notify(0, "You are no longer connected... The authentication token has already expired!");
             localStorage.removeItem('user');
             redirect_to("/index.html", 2000);
         }else{
-            notify(0, "Une erreur est survenue... !")
+            notify(0, "An error has occured... !")
         }
     }
 }
@@ -393,25 +487,26 @@ async function manage_enum_constraints_definition(cFile_id, token) {
     if(response.ok){
         let data = response.json();
         data.then((data)=>{
-            console.log(data)
-            fill_details_enum_features(data);
+            console.log("enum details length = ");
+            all_enum_details = data;
+            console.log(all_enum_details.length)
         });
     }else{
         if (response.status == 404) {
-            notify(0, "Caractéristiques introuvables ou non prises en compte.")
+            notify(0, "Features not found or not taken into account .")
         }
         else if(response.status == 403) {
-            notify(0, "Vous n'êtes plus connecté.es... Le token d'authentification a déjà expiré !");
+            notify(0, "You are no longer connected... The authentication token has already expired!");
             localStorage.removeItem('user');
             redirect_to("/index.html", 2000);
         }else{
-            notify(0, "Une erreur est survenue... !")
+            notify(0, "An error has occured... !")
         }
     }
 }
 
 function get_int_constraints() {
-    let feature_inputs = document.querySelectorAll('.feature-input');
+    let feature_inputs = document.querySelectorAll('.int-feature-input');
     let int_constraints = [] ;
     let feature_id = undefined;
 
@@ -423,8 +518,65 @@ function get_int_constraints() {
             feature_id : feature_id
         })
     }
-    console.log(int_constraints);
     return int_constraints;
+}
+
+function get_enum_constraints(e) {
+    e.preventDefault();
+    let feature_id = document.getElementById("enum-feature-input").dataset.feature_id;
+    
+    for(let value of actual_features_values){
+        let selectMetric = document.getElementById('main-metric'+value);
+        let option = selectMetric.options[selectMetric.selectedIndex].value;
+
+        if(option == "lessThan"){
+            let input_value = document.getElementById(value+"_main").value;
+            let second_input_value = document.getElementById(value+"_more").value;
+            enum_constraints_to_save.push({
+                value: value,
+                number : parseInt(input_value),
+                metric : "<=",
+                feature_id : parseInt(feature_id)
+            });
+            if( !isNaN(parseInt(second_input_value))){
+                enum_constraints_to_save.push({
+                    value: value,
+                    number : parseInt(second_input_value),
+                    metric : ">=",
+                    feature_id : parseInt(feature_id)
+                });
+            }
+        }
+        else if(option == "moreThan"){
+            let input_value = document.getElementById(value+"_main").value;
+            let second_input_value = document.getElementById(value+"_less").value;
+            enum_constraints_to_save.push({
+                value: value,
+                number : parseInt(input_value),
+                metric : ">=",
+                feature_id : parseInt(feature_id)
+            });
+            if(!isNaN(parseInt(second_input_value))){
+                enum_constraints_to_save.push({
+                    value: value,
+                    number : parseInt(second_input_value),
+                    metric : "<=",
+                    feature_id : parseInt(feature_id)
+                });
+            }
+        }
+        else{
+            let input_value = document.getElementById(value+"_main").value;
+            enum_constraints_to_save.push({
+                value: value,
+                number : parseInt(input_value),
+                metric : "==",
+                feature_id : parseInt(feature_id)
+            });
+        }
+    }
+    fill_details_enum_features();
+
 }
 
 function fill_features(features) {
@@ -439,21 +591,20 @@ function fill_features(features) {
     }
 }
 
-
 function fill_details_int_features(data) {
     let int_constraints_container = document.getElementById('constraints-forms');
     for (let detail of data) {
         int_constraints_container.innerHTML += `
-        <div class="feature-input" data-feature_id="`+detail.feature_id+`">
+        <div class="int-feature-input feature-input" data-feature_id="`+detail.feature_id+`">
             <div class="feature-name">
                 <p>`+detail.label+`</p>
             </div>
             <div class="int-input-container">
-                <div class="int-input" title="Le minimum pour cette caractéristique">
+                <div class="int-input" title="The minimum value for this value">
                     <label for="feature_min">Min:</label>
                     <input type="number" id="`+detail.feature_id+"_min"+`" value="`+detail.min+`" min="`+detail.min+`" max="`+detail.max+`" name="`+detail.feature_id+"_min"+`" required>
                 </div>
-                <div class="int-input" title="Le maximum pour cette caractéristique">
+                <div class="int-input" title="The minimum value for this value">
                     <label for="feature_max">Max:</label>
                     <input type="number" id="`+detail.feature_id+"_max"+`" value="`+detail.max+`" min="`+(detail.min+1)+`" max="`+detail.max+`" name="`+detail.feature_id+"_max"+`" required>
                 </div>
@@ -463,6 +614,172 @@ function fill_details_int_features(data) {
     }
 }
 
-function fill_details_enum_features(data) {
+function fill_details_enum_features() {
+    if (all_enum_details.length != 0) {
+        let feature = all_enum_details[0];
+        let feature_name = Object.keys(feature)[0];
+        let feature_values = feature[feature_name];
+        let feature_id = feature_values[0].feature_id;
+        let enum_constraints_container = document.getElementById('single-enum-container');
+        actual_features_values = []
+
+        document.getElementById("enum-feature-input").dataset.feature_id = feature_id;
+        document.getElementById('enum-feature-name').innerText = feature_name;
+        enum_constraints_container.innerHTML = " ";
+        for (let detail of feature_values) {
+            actual_features_values.push(detail.value);
+            enum_constraints_container.innerHTML += `
+            <div class="enum-input">
+                <div class="feature-value">
+                    <p>`+detail.value+`</p>
+                </div>
+                <div class="input-select">
+                    <div class="select">
+                        <select id="main-metric`+detail.value+`" name="main-metric`+detail.value+`" onchange = "show_option_for_enum(this.id)">
+                            <option value="lessThan">Less Than</option>
+                            <option value="moreThan">More Than</option>
+                            <option value="equalTo">Exactly</option>
+                        </select>
+                    </div>
+                    <input type="number" id="`+detail.value+`_main" min="0" max="`+detail.number+`" name="`+detail.value+`_main" required>
+                </div>                                                
+            </div>
+            <div id="more-than-option`+detail.value+`" class="enum-input additional-option">
+                <div class="feature-value">
+                    <p>`+detail.value+`</p>
+                </div>
+                <div class="input-select">
+                    <div class="select">
+                        <select name="metric-less`+detail.value+`">
+                            <option value="lessThan" disabled>Less Than</option>
+                            <option value="moreThan" selected>More Than</option>
+                            <option value="equalTo" disabled>Exactly</option>
+                        </select>
+                    </div>
+                    <input type="number" id="`+detail.value+`_more" min="1" max="`+detail.number+`" name="`+detail.value+`_more">
+                </div>
+            </div>
+            <div id="less-than-option`+detail.value+`" class="enum-input additional-option">
+                <div class="feature-value">
+                    <p>`+detail.value+`</p>
+                </div>
+                <div class="input-select">
+                    <div class="select">
+                        <select name="metric-more`+detail.value+`">
+                            <option value="lessThan" selected>Less Than</option>
+                            <option value="moreThan" disabled>More Than</option>
+                            <option value="equalTo" disabled>Exactly</option>
+                        </select>
+                    </div>
+                    <input type="number" id="`+detail.value+`_less" min="1" max="`+detail.number+`" name="`+detail.value+`_less">
+                </div>
+            </div>
+                `;
+        }
+        all_enum_details.shift();
+        
+    } else {
+        display_new_interface();
+        save_enum_constraints();
+    }
+}
+
+function fill_details_for_validation(data) {
+    validate_enum.style.display = "none";
+    final_button.style.display = "none";
+    let int_tbody = "<tbody>";
+    let enum_tbody = "<tbody>";
+    for(let i_data of data.iconstraints){
+        int_tbody+=`
+        <tr>
+            <td>`+i_data.feature_name+`</td>
+            <td>`+i_data.min+`</td>
+            <td>`+i_data.max+`</td>
+        </tr>`
+    }
+    int_tbody+="</tbody>";
+
+    for(let e_data of data.econstraints){
+        enum_tbody+=`
+        <tr>
+            <td>`+e_data.feature_name+`</td>
+            <td>`+e_data.value+`</td>
+            <td>`+e_data.metric+`</td>
+        </tr>`
+    }
+    enum_tbody+="</tbody>";
+
+    validate_int.innerHTML = `
+    <div class="underline-title">
+        <p>Summary of constraints on integer Values</p>
+        <hr>
+    </div>
+    <table class="responsive-table">
+        <caption></caption>
+        <thead>
+            <tr>
+                <th>Features</th>
+                <th>Minimum value</th>
+                <th>Maximum value</th>
+                </tr>
+        </thead>`
+        +int_tbody+`
+    </table>`
+
+    validate_enum.innerHTML = `
+    <div class="underline-title">
+        <p>Summary of constraints on enumerated values</p>
+        <hr>
+    </div>
+    <table class="responsive-table">
+        <caption></caption>
+        <thead>
+            <tr>
+                <th>Features</th>
+                <th>Values</th>
+                <th>Metric</th>
+            </tr>
+        </thead>`
+        +enum_tbody+`
+    </table>`
+}
+
+function display_new_interface() {
+    enum_constraints_form.style.display = "none";
+    limit_constraint_form.style.display = "block"
+}
+
+function display_results(data) {
+    document.getElementById('resolution-status').innerText = data.status;
+    document.getElementById('resolution-n-sol').innerText = data.number_of_solutions;
+
+    let table_header = `<div class="table-row header">`;
+    let select_list = `<div class="table">`;
+    let single_row ;
+    let sample_results = document.getElementById('sample-results');
+    // let all_tables;
+
+    for (let col of data.columns){
+        table_header+=`<div class="cell">`+col+`</div>`
+    }
+    table_header+='</div>'  
+    for(let one_list of data.solutions){
+        select_list = `<div class="table">`;
+        select_list+= table_header;
+        for(let one_row of one_list){
+            single_row = `<div class="table-row">`;
+            for (let col of data.columns) {
+                single_row+=`<div class="cell" data-title="`+col+`">`+one_row[col]+`</div>`
+            }
+            single_row+=`</div>`;
+            select_list+=single_row;
+        }
+        select_list+=`</div>`;
+        sample_results.innerHTML+=select_list;
+    }
+    result_section.style.display = "block";
+}
+
+function download_solutions_pdf() {
     
 }
