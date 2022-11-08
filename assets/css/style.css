@@ -139,7 +139,7 @@ a{
     font-size: 1rem;
     align-items: center;
     justify-content: center;
-    border-radius: 1rem;
+    border-radius: .5rem;
     outline: none;
     overflow: hidden;
     cursor: pointer;
