@@ -1,5 +1,5 @@
 <div class="underline-title">
-    <p class="headline">Effectuer une opération de sélection</p>
+    <p class="headline">Perform a select operation</p>
     <hr>
 </div>
 <div class="container">
@@ -8,15 +8,15 @@
             <div class="left-side">
                 <div class="steps-content">
                     <h3>Etape <span class="step-number">1</span></h3>
-                    <p class="step-number-content active">Uploader le fichier de données des candidats.</p>
-                    <p class="step-number-content d-none">Sélectionner les caractéristiques contraignables.</p>
-                    <p class="step-number-content d-none">Définissez vos critères sur chaque caractéristiques.</p>
-                    <p class="step-number-content d-none">Valider et lancer le traitement.</p>
+                    <p class="step-number-content active">Upload candidate data file.</p>
+                    <p class="step-number-content d-none">Select compellable features.</p>
+                    <p class="step-number-content d-none">Define your criteria on each feature.</p>
+                    <p class="step-number-content d-none">Validate and start processing.</p>
                 </div>
                 <ul class="progress-bar">
                     <li class="active">Upload</li>
-                    <li>Choix caractéristiques</li>
-                    <li>Définition des critères</li>
+                    <li>Choice of features</li>
+                    <li>Definition of criteria</li>
                     <li>Validation</li>
                 </ul>
             </div>
@@ -24,7 +24,7 @@
                 <div class="main active">
                     <div class="text">
                         <h2>Upload</h2>
-                        <p>Uploader un fichier <code>.csv</code> ou <code>xlsx</code> qui renseigne les informations sur les candidats</p>
+                        <p>Upload a <code>.csv</code> or <code>xlsx</code> file that informs candidate information</p>
                     </div>
                     <div class="section-content  step-1">
                         <form id="upload_form" class="upload_file" enctype="multipart/form-data">
@@ -34,20 +34,20 @@
                                     <div class="upload-icone">
                                         <img src="../img/upload.svg" alt="Upload Icone" >
                                     </div>
-                                    <p id="input_file_placeholder">Glissez-déposez vos fichiers ici ou cliquez sur la zone encadrée</p>
+                                    <p id="input_file_placeholder">Drag and drop your files here or click on the framed area</p>
                                 </div>
                             </div>
-                            <button class="submit-button-dark" type="submit">Valider</button>
+                            <button class="submit-button-dark" type="submit">Validate</button>
                         </form>
                     </div>
                     <div class="buttons">
-                        <button id="file_upload_next" class="next_button">Suivant</button>
+                        <button id="file_upload_next" class="next_button">Next</button>
                     </div>
                 </div>
                 <div class="main">
                     <div class="text">
-                        <h2>Sélection des caractéritiques</h2>
-                        <p>Sélectionner les caractéristiques sur lesquelles vous voulez définir des critères.</p>
+                        <h2>Choice of features</h2>
+                        <p>Select the features on which you want to define criteria.</p>
                     </div>
                     <div class="section-content  step-2">
                         <div class="checkbox-list">
@@ -55,19 +55,19 @@
                                 <div id="list_features" class="row space-between">
                                     
                                 </div>
-                                <button id="validate-f-select" class="submit-button-dark" type="submit">Valider</button>
+                                <button id="validate-f-select" class="submit-button-dark" type="submit">Validate</button>
                             </form>
                         </div>
                     </div>
                     <div class="buttons button_space">
-                        <button class="back_button">Retour</button>
-                        <button class="next_button">Suivant</button>
+                        <button class="back_button">Back</button>
+                        <button class="next_button">Next</button>
                     </div>
                 </div>
                 <div class="main">
                     <div class="text">
-                        <h2>Définition des critères de sélection</h2>
-                        <p>Définissez les critères de sélection des candidats.</p>
+                        <h2>Definition of selection criteria</h2>
+                        <p>Define candidates selection criteria.</p>
                     </div>
                     <div class="section-content  step-3">
                         <div class="single-form">
@@ -76,123 +76,117 @@
                                     <div id="constraints-forms">
                                         
                                     </div>
-                                    <button class="submit-button" type="submit">Valider</button>
+                                    <button class="submit-button" type="submit">Validate</button>
                                 </form>
                                 <form id="enum-constraint-define">
                                     <div id="constraints-forms">
-                                        OHLALA
+                                        <div class="enum-input-container">
+                                            <div id="enum-feature-input" class="feature-input" data-feature_id="">
+                                                <div class="feature-name">
+                                                    <p id="enum-feature-name"></p>
+                                                </div>
+                                                <div id="single-enum-container">
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <button class="submit-button" type="submit">Valider</button>
+                                    <button id="econstraint-btn" class="submit-button" type="submit">Validate</button>
+                                </form>
+                                <form id="limit-constraint-define">
+                                    <div id="constraints-forms">
+                                        <div class="feature-input" data-feature_id="`+detail.feature_id+`">
+                                            <div class="feature-name">
+                                                <p>Limit of selections to be made</p>
+                                            </div>
+                                            <br>
+                                            <small style="color: white;">Enter -1 if you want to get all the proposals</small>
+                                            <br><br>
+                                            <div class="int-input-container">
+                                                <div class="int-input" title="Set a limit of proposals to make to you">
+                                                    <label for="feature_min">Limit of selections : &nbsp;</label>
+                                                    <input type="number" id="limit-number" value="-1" min="-1" name="limit-number-constraint" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button id="limit_button" class="submit-button" type="submit">Validate</button>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div class="buttons button_space">
-                        <button class="next_button">Suivant</button>
+                    <div class="buttons">
+                        <button id="end-constraints" class="next_button">Next</button>
                     </div>
                 </div>                      
                 <div class="main">
                     <div class="text">
                         <h2>Validation</h2>
-                        <p>Veuillez valider les critères définis puis lancer le traitement.</p>
+                        <p>Please validate the defined criteria then launch the processing.</p>
                     </div>
                     <div class="section-content  step-4">
                         <div class="validate-tables">
-                            <div class="underline-title">
-                                <p>Résumé des contraintes sur des valeurs entières</p>
-                                <hr>
+                            <div id="validate-int" class="table-container">
+                                
                             </div>
-                            <div class="table-container validate-int">
-                                <table class="responsive-table">
-                                    <caption></caption>
-                                    <thead>
-                                        <tr>
-                                            <th>Caractéristiques</th>
-                                            <th>Minimum</th>
-                                            <th>Maximum</th>
-                                            </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Age</td>
-                                            <td>21</td>
-                                            <td>32</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Niveau Python</td>
-                                            <td>2</td>
-                                            <td>3</td>
-                                        </tr>                                       
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="table-container validate-enum">
-                                <div class="underline-title">
-                                    <p>Résumé des contraintes sur des énumérations</p>
-                                    <hr>
-                                </div>
-                                <table class="responsive-table">
-                                    <caption></caption>
-                                    <thead>
-                                        <tr>
-                                            <th>Caractéristiques</th>
-                                            <th>Valeur</th>
-                                            <th>Au moins</th>
-                                            <th>Au plus</th>
-                                            </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Genre</td>
-                                            <td>M</td>
-                                            <td>/</td>
-                                            <td>/</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Genre</td>
-                                            <td>F</td>
-                                            <td>3</td>
-                                            <td>/</td>
-                                        </tr>    
-                                        <tr>
-                                            <td>Diplôme</td>
-                                            <td>BAC</td>
-                                            <td>/</td>
-                                            <td>1</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Diplôme</td>
-                                            <td>Licence</td>
-                                            <td>/</td>
-                                            <td>/</td>
-                                        </tr>    
-                                        <tr>
-                                            <td>Diplôme</td>
-                                            <td>Master</td>
-                                            <td>2</td>
-                                            <td>/</td>
-                                        </tr>                              
-                                    </tbody>
-                                </table>
+                            <div id="validate-enum" class="table-container">
+                                
                             </div>
                         </div>
                     </div>
                     <div class="buttons button_space">
-                        <button class="next_button">Valider</button>
+                        <button id="validation_button">OK</button>
+                        <button id="final_button" class="next_button">Validate</button>
                     </div>
                 </div>
                 <div class="main">
-                    <div class="text">
-                        <h2 class="final-step">Sélection des candidats</h2>
+                    <div class="text actions-btn-container">
+                        <h2 class="final-step">Selection of candidates</h2>
+                        <div class="actions-btn">
+                            <button title="Download all the solutions in a pdf file" class="download-file-btn" type="button" id="btn-download"><img src="../img/file-pdf.png" alt="Download Pdf" ></button>
+                            <button title="Download all the solutions in a excel file" class="download-file-btn" type="button" id="btn-download"><img src="../img/excel.png" alt="Download Excel" ></button>
+                        </div>
                     </div>
-                    <div class="section-content step-5">
+                    <div id="last-section" class="section-content step-5">
                         <div class="loader">
-                            <span>{</span>&ensp;<code>Traitement ...</code>&ensp;<span class="odd-span">}</span>
+                            <span>{</span>&ensp;<code>Processing ...</code>&ensp;<span class="odd-span">}</span>
                         </div>
                     </div>
                     <div class="sub_steps-name">
-                        <p>Détermination des variables</p>
-                    </div>    
+                        <p>Determination of variables</p>
+                    </div>
+                    
+                    <div id="main-result" class="main-result">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="top-row">
+                                    <div class="title">
+                                        <div class="icon"></div>
+                                        <div class="name">Resolution status</div>
+                                    </div>
+                                </div>
+                                <div id="resolution-status" class="middle-row">-</div>
+                                <div class="bottom-row">C-Elect</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="top-row">
+                                    <div class="title">
+                                        <div class="icon"></div>
+                                        <div class="name">Number of solutions</div>
+                                    </div>
+                                </div>
+                                <div id="resolution-n-sol" class="middle-row">-</div>
+                                <div class="bottom-row">C-Elect</div>
+                            </div>
+                        </div>
+                        <div class="underline-title">
+                            <p>Preview of selection lists</p>
+                            <hr>
+                        </div>
+                        <div id="sample-results" class="sample-results">
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

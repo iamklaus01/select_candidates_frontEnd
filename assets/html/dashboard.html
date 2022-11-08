@@ -44,25 +44,25 @@
                     <li>
                         <a href="#"  data-content = 'profil.html' data-js="" data-id="profil">
                             <span><i class="fa fa-address-card" aria-hidden="true"></i> </span>
-                            <span>Mon Profil</span>
+                            <span>My Profile</span>
                         </a>
                     </li>
                     <li>
                         <a href="#"  data-content = 'manage_users.html' data-js="" data-id="users">
                             <span><i class="fa fa-users" aria-hidden="true"></i> </span>
-                            <span>Gestion Utilisateurs</span>
+                            <span>Users Management</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" data-content = 'user_files.html' data-js="" data-id="files">
                             <span><i class="fa fa-folder-tree" aria-hidden="true"></i> </span>
-                            <span>Mes fichiers</span>
+                            <span>My Files</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" data-content = 'make_selection.html' data-js="make_selection.js" data-id="selection">
                             <span><i class="fa fa-check-double" aria-hidden="true"></i> </span>
-                            <span>Effectuer Sélection</span>
+                            <span>Make a Selection</span>
                         </a>
                     </li>
                     <li>
@@ -99,7 +99,7 @@
                     <div class="card-single">
                         <div>
                             <h1 id="stat_n_users">-</h1>
-                            <span>Nombre d'utilisateurs</span>
+                            <span> Number of users</span>
                         </div>
                         <div>
                             <i class="fas fa-users" aria-hidden="true"></i>
@@ -109,7 +109,7 @@
                     <div class="card-single">
                         <div>
                             <h1 id="stat_n_files">-</h1>
-                            <span>Nombre de fichiers</span>
+                            <span>Number of files</span>
                         </div>
                         <div>
                             <i class="fa fa-file-arrow-down" aria-hidden="true"></i>
@@ -119,7 +119,7 @@
                     <div class="card-single">
                         <div>
                             <h1 id="stat_n_sol">-</h1>
-                            <span>Nombre d'opérations</span>
+                            <span>Number of operations</span>
                         </div>
                         <div>
                             <i class="fa fa-lightbulb" aria-hidden="true"></i>
@@ -138,7 +138,35 @@
                 </div>
             </main>
         </div> 
+        <script>
+            function show_option_for_enum(id){
+                let value = id.substr(11);
+                let selectMetric = document.getElementById(id);
+                let moreForm = document.getElementById('more-than-option'+value);
+                let lessForm = document.getElementById('less-than-option'+value);
 
+                let option = selectMetric.options[selectMetric.selectedIndex].value
+                
+                if(option == "lessThan"){
+                    moreForm.classList.remove('hide')
+                    moreForm.classList.add('show')
+                    lessForm.classList.remove('show')
+                    lessForm.classList.add('hide')
+                }
+                else if(option == "moreThan"){
+                    lessForm.classList.remove('hide')
+                    lessForm.classList.add('show')
+                    moreForm.classList.remove('show')
+                    moreForm.classList.add('hide')
+                }
+                else{
+                    moreForm.classList.remove('show')
+                    lessForm.classList.remove('show')
+                    moreForm.classList.add('hide')
+                    lessForm.classList.add('hide')
+                }
+            }
+        </script>
         <script type="module" src="../js/dashboard.js"></script>   
         <script type="module" src="../js/dashboard-content.js"></script>  
     </body>

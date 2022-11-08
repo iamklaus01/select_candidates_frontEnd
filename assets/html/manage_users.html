@@ -1,5 +1,5 @@
 <div class="underline-title mt-4 mb-5">
-    <p class="headline">Gestion des utilisateurs</p>
+    <p class="headline">Users Management</p>
     <hr>
 </div>
 <div class="container-fluid">
@@ -8,10 +8,10 @@
         <thead>
             <tr>
                 <th class="t-small">N&deg;</th>
-                <th class="t-medium">Nom & Prénom(s)</th>
+                <th class="t-medium">Name</th>
                 <th class="t-medium">Email</th>
                 <th class="t-medium">Role</th>
-                <th class="t-medium">Date d'inscription</th>
+                <th class="t-medium">Registration Date</th>
                 <th class="t-medium">Status</th>
                 <th class="t-small">Action</th>
             </tr>
@@ -22,36 +22,36 @@
     </table>
     <div class="mt-5">
         <form id="add-admin">
-            <h6 class="heading-small text-muted mb-4">Ajouter un administrateur</h6>
+            <h6 class="heading-small text-muted mb-4">Add an administrator</h6>
             <div>
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group focused">
-                        <label class="form-control-label" for="input-username">Nom & Prénom(s)</label>
-                        <input type="text" name="fullname" id="input-username" class="form-control form-control-alternative" placeholder="Nom & Prénom(s)" required>
+                        <label class="form-control-label" for="input-username">Name</label>
+                        <input type="text" name="fullname" id="input-username" class="form-control form-control-alternative" placeholder="Firstname and Surname" required>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                        <label class="form-control-label" for="input-email">Adresse email</label>
+                        <label class="form-control-label" for="input-email">Email address</label>
                         <input type="email" name="email" id="input-email" class="form-control form-control-alternative" required>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                        <label class="form-control-label" for="input-pwd">Mot de passe</label>
+                        <label class="form-control-label" for="input-pwd">Password</label>
                         <input type="password" name="password" id="input-pwd" class="form-control form-control-alternative" required>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                        <label class="form-control-label" for="input-c-pwd">Confirmer Mot de passe</label>
+                        <label class="form-control-label" for="input-c-pwd">Confirm the password</label>
                         <input type="password" name="pwd_confirmed" id="input-c-pwd" class="form-control form-control-alternative" required>
                         </div>
                     </div>
                 </div>
             </div>
-            <button id="add-admin-button" class="submit-button-dark" type="submit">Ajouter</button>
+            <button id="add-admin-button" class="submit-button-dark" type="submit">Add</button>
         </form>
     </div>
 </div>
