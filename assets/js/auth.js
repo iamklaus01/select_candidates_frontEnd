@@ -76,14 +76,14 @@ async function register_user() {
         if(response.ok){
             let data = response.json();
             data.then((message)=>{
-                notify(1, message.message+"<br> Veuillez vous connecter avec vos identifiants");
+                notify(1, message.message+"<br> Please login with your credentials");
                 document.querySelector('#switch-2').click()
             });
         }else{
             if (response.status == 409) {
-                notify(0, "Mots de passe non conformes");
+                notify(0, "Non-compliants password");
             }else{
-                notify(0, "Une erreur est survenue... Il se pourrait que l'adresse mail soit incorrecte ou déjà utilisée!");
+                notify(0, "An error has occurred... The email address may be incorrect or already in use!");
             }
         }
     } catch (error) {
@@ -108,13 +108,13 @@ async function user_login() {
         }else{
             switch (response.status) {
                 case 401:
-                    notify(0, "Votre compte n'est plus actif !");
+                    notify(0, "Your account is no longer active !");
                     break;
                 case 404:
-                    notify(0, "Utilisateur introuvable! L'adresse mail ou le nom d'utilisateur est incorrecte !");
+                    notify(0, "User not found! The email address or username is incorrect!");
                     break;
                 default:
-                    notify(0, "Une erreur est survenue ! Veuillez entrer des données correctes");
+                    notify(0, "An error has occurred ! Please enter correct data");
                     break;
             }
         }
