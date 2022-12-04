@@ -53,6 +53,7 @@
                 <button type="submit">Login</button>
               </form>
             </div>
+            <div id="login_loader" class="circle-loader"></div>
           </div>
     
           <div class="signup hide">
@@ -61,11 +62,12 @@
               <form id="sign_up">
                 <input type="text" name="fullname" placeholder="Your surname and first name(s)" required>
                 <input type="email" name="email" placeholder="Your email address" required>
-                <input type="password" name="password" placeholder="Your password" required>
-                <input type="password" name="pwd_confirmed" placeholder="Confirm your password" required>
+                <input type="password" name="password" placeholder="Your password" minlength="8" required>
+                <input type="password" name="pwd_confirmed" placeholder="Confirm your password" minlength="8" required>
                 <button type="submit">Register</button>
               </form>
             </div>
+            <div id="register_loader" class="circle-loader"></div>
           </div>
           
         </div>
