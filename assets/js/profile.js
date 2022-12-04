@@ -56,7 +56,7 @@ async function update_profile(){
                 localStorage.removeItem('user');
                 redirect_to("/index.html", 2000);
             }else{
-                notify(0, "An error occurred... Your profile could not be uploaded !")
+                notify(0, "An error occurred... Your profile could not be updated !")
             }
         }
     } catch (error) {
