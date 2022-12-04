@@ -275,6 +275,28 @@ body {
     text-transform: uppercase;
 }
 
+.circle-loader {
+    display: none;
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    border-left-color: var(--color-dark);
+    animation: loader-spin 1.4s infinite linear;
+    position: relative;
+    vertical-align: top;
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+}
+  
+@keyframes loader-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+  
+
 @media (max-width:770px) {
     .container{
         width: 85vw;
