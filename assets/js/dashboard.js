@@ -10,6 +10,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
         notify(0, "You are not logged in to perform this operation... Please log in first !");
         redirect_to("/index.html", 2000);
     }
+
+    if (! user.is_admin()) {
+        document.getElementById('admin_action').style.display="none";
+    }
 });
 
 
@@ -150,8 +154,8 @@ async function get_data(id) {
                 let user_id = JSON.parse(localStorage.getItem('user')).user_id;
                 go_to_users_management(token, user_id);
             } else {
-                notify(0, "You are not logged in to view this content... Please log in first!");
-                redirect_to("/index.html", 2000);
+                notify(0, "You are not authenticated to access to this content... !");
+                redirect_to("/assets/html/dashboard.html", 1000);
             }
             break;
         }
@@ -319,7 +323,7 @@ function fill_files_table(files) {
             }
             status_class = (file.status == "OPTIMAL") ? "t-active" : "t-inactive"
             let res_status = (file.status == undefined) ? "-" : file.status
-            let nbre_sol = (file.nbe_sol == undefined) ? "-" : file.nbe_sol
+            let nbre_sol = (file.nbre_sol == undefined) ? "-" : file.nbre_sol
             
             files_tbody.innerHTML += `
             <tr>
@@ -345,7 +349,7 @@ function set_system_stats(stats) {
     document.getElementById('stat_n_users').innerText = stats.n_users;
     document.getElementById('stat_n_files').innerText = stats.n_files;
     document.getElementById('stat_n_sol').innerText = stats.n_sol;
-    document.getElementById('stat_percent').innerText = percent;
+    document.getElementById('stat_percent').innerText = percent+'%';
     
 }
 
