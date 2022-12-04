@@ -11,6 +11,10 @@ let frontbox = document.querySelector('.front-box');
 let register_form = document.getElementById('sign_up');
 let login_form = document.getElementById('login');
 
+// Loaders
+let register_loader = document.getElementById('register_loader');
+let login_loader = document.getElementById('login_loader');
+
 // Notification Box
 let success_notification_message = document.querySelector('.good.banner-message');
 let error_notification_message = document.querySelector('.bad.banner-message');
@@ -71,12 +75,14 @@ function manage_box_moving(to_add) {
 // Register user function
 async function register_user() {
     try{
+        register_loader.style.display = "inline-block";
         let response = await user.register(register_form);
         register_form.reset();
+        register_loader.style.display = "none";
         if(response.ok){
             let data = response.json();
             data.then((message)=>{
-                notify(1, message.message+"<br> Please login with your credentials");
+                notify(1, "Account created successfully ! A mail has been sent to you... Check your inbox to verify your email !");
                 document.querySelector('#switch-2').click()
             });
         }else{
@@ -97,7 +103,9 @@ async function user_login() {
     try {
         let email = document.getElementsByName('log_email')[0].value;
         let pwd = document.getElementsByName('log_password')[0].value;
+        login_loader.style.display = "inline-block";
         let response = await user.log_user(email, pwd);
+        login_loader.style.display = "none";
         if(response.ok){
             let data = response.json();
             data.then((user) =>{
@@ -112,6 +120,9 @@ async function user_login() {
                     break;
                 case 404:
                     notify(0, "User not found! The email address or username is incorrect!");
+                    break;
+                case 403:
+                    notify(0, "Your email address is still not verified! An email has been sent to you to verify it!");
                     break;
                 default:
                     notify(0, "An error has occurred ! Please enter correct data");
