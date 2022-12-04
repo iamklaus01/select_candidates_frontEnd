@@ -34,10 +34,11 @@
                                     <div class="upload-icone">
                                         <img src="../img/upload.svg" alt="Upload Icone" >
                                     </div>
-                                    <p id="input_file_placeholder">Drag and drop your files here or click on the framed area</p>
+                                    <p id="input_file_placeholder">Drag and drop your files here or click on the framed area</p> <br>
+                                    <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
                                 </div>
                             </div>
-                            <button class="submit-button-dark" type="submit">Validate</button>
+                            <button id="file_upload_btn" class="submit-button-dark" type="submit">Validate</button>
                         </form>
                     </div>
                     <div class="buttons">
@@ -100,7 +101,7 @@
                                                 <p>Limit of selections to be made</p>
                                             </div>
                                             <br>
-                                            <small style="color: white;">Enter -1 if you want to get all the proposals</small>
+                                            <small style="color: white;">Enter -1 or 0 if you want to get all the proposals</small>
                                             <br><br>
                                             <div class="int-input-container">
                                                 <div class="int-input" title="Set a limit of proposals to make to you">
