@@ -1,4 +1,5 @@
 import * as user from './api_bridge.js';
+import * as makeFile from './make_pdf.js';
 
 // Notifications variables
 let success_notification_message = document.querySelector('.good.banner-message');
@@ -20,7 +21,7 @@ let final_button=document.getElementById("final_button");
 let validation_button=document.getElementById("validation_button");
 
 let result_section = document.getElementById('main-result'); 
-let docDefinition;
+let all_solutions = [];
 let pdf_download_btn = document.getElementById('btn-pdf-download'); 
 let excel_download_btn = document.getElementById('btn-excel-download'); 
 
@@ -50,6 +51,7 @@ let end_constraints_btn = document.getElementById('end-constraints');
 let limit_btn = document.getElementById('limit_button');
 
 let upload_file_nextBtn = document.getElementById("file_upload_next");
+let upload_file_btn = document.getElementById("file_upload_btn");
 upload_file_nextBtn.style.display = "none"
 
 let all_enum_details = [];
@@ -89,6 +91,16 @@ enum_constraints_form.addEventListener('submit', get_enum_constraints)
 limit_constraint_form.addEventListener('submit', go_to_constraint_validation)
  inputFile.addEventListener('change', () =>{
      if(inputFile.files.length > 0) {
+        upload_file_btn.style.display = 'block';
+        document.getElementById('progressBar').value = 0;
+        const fileSize = inputFile.files.item(0).size;
+        const fileMb = fileSize / 1024 ** 2;
+            if (fileMb >= 2) {
+                notify(0, "Please, select a file less than 2MB.")
+                upload_file_btn.disabled = true;
+            } else {
+                upload_file_btn.disabled = false;
+            }
         let filename = inputFile.value.split(/[\\\/]+/).pop()
         input_file_placeholder.innerHTML = "The file <code>"+filename+"</code> has been uploaded"
      }
@@ -234,17 +246,20 @@ function redirect_to(path, duration) {
 async function upload_file(file){
     if (user.is_authenticated()) {
         try {
+            document.getElementById('progressBar').value = 50;
             let token = JSON.parse(localStorage.getItem('user')).token;
             let user_id = JSON.parse(localStorage.getItem('user')).user_id;
             let response = await user.upload_candidate_file(file, token, user_id)
             if(response.ok){
+                document.getElementById('progressBar').value = 100;
                 let data = response.json();
                 data.then((data)=>{
                     localStorage.setItem('features', JSON.stringify(data))
                     input_file_placeholder.innerHTML = "File uploaded"
                     notify(1, "File uploaded successfully! Click Next to continue")
                     fill_features(data.data);
-                    upload_file_nextBtn.style.display = "block"
+                    upload_file_nextBtn.style.display = "block";
+                    upload_file_btn.style.display = 'none';
                 });
             }else{
                 if (response.status == 404) {
@@ -422,12 +437,13 @@ async function launch_solving(){
     try {
         let token = JSON.parse(localStorage.getItem('user')).token;
         let cFile_id = JSON.parse(localStorage.getItem('features')).c_file_id;
-        let response = await user.solve(cFile_id, token);
+        let response = await user.solve(cFile_id, limit_proposition, token);
         if(response.ok){
             let data = response.json();
             data.then((data)=>{
                 console.log(data)
                 stop_progressing();
+                save_solutions(data);
                 display_results(data);
                 notify(1, "Resolution completed successfully !")
             });
@@ -442,6 +458,33 @@ async function launch_solving(){
         }
     } catch (error) {
         notify(0, "An error has occured")
+        console.log(error);
+    }
+}
+
+async function save_solutions(data) {
+    try {
+        let encoded = encodeURI(JSON.stringify(data.solutions));
+        let token = JSON.parse(localStorage.getItem('user')).token;
+        let cFile_id = JSON.parse(localStorage.getItem('features')).c_file_id;
+    
+        let response = await user.save_solution(encoded, cFile_id, data.number_of_solutions, data.status, token);
+        if(response.ok){
+            let data = response.json();
+            data.then((data)=>{
+                console.log(data)
+            });
+        }else{
+            if(response.status == 403) {
+                notify(0, "You are no longer connected... The authentication token has already expired!");
+                localStorage.removeItem('user');
+                redirect_to("/index.html", 2000);
+            }else{
+                notify(0, "An error has occured while saving the selection !")
+            }
+        }
+    } catch (error) {
+        notify(0, "An error has occured while saving the selection !")
         console.log(error);
     }
 }
@@ -602,11 +645,11 @@ function fill_details_int_features(data) {
             <div class="int-input-container">
                 <div class="int-input" title="The minimum value for this value">
                     <label for="feature_min">Min:</label>
-                    <input type="number" id="`+detail.feature_id+"_min"+`" value="`+detail.min+`" min="`+detail.min+`" max="`+detail.max+`" name="`+detail.feature_id+"_min"+`" required>
+                    <input type="number" id="`+detail.feature_id+"_min"+`" value="`+detail.min+`" min="`+detail.min+`" max="`+(Math.ceil(detail.max))+`" name="`+detail.feature_id+"_min"+`" required>
                 </div>
                 <div class="int-input" title="The minimum value for this value">
                     <label for="feature_max">Max:</label>
-                    <input type="number" id="`+detail.feature_id+"_max"+`" value="`+detail.max+`" min="`+(detail.min+1)+`" max="`+detail.max+`" name="`+detail.feature_id+"_max"+`" required>
+                    <input type="number" id="`+detail.feature_id+"_max"+`" value="`+detail.max+`" min="`+(detail.min+1)+`" max="`+(Math.ceil(detail.max))+`" name="`+detail.feature_id+"_max"+`" required>
                 </div>
             </div>
         </div>
@@ -711,7 +754,7 @@ function fill_details_for_validation(data) {
 
     validate_int.innerHTML = `
     <div class="underline-title">
-        <p>Summary of constraints on integer Values</p>
+        <p>Summary of constraints on number Values</p>
         <hr>
     </div>
     <table class="responsive-table">
@@ -757,14 +800,14 @@ function display_results(data) {
     let select_list = `<div class="table">`;
     let single_row ;
     let sample_results = document.getElementById('sample-results');
-    // let all_tables;
 
     for (let col of data.columns){
         table_header+=`<div class="cell">`+col+`</div>`
     }
     table_header+='</div>'  
-    for(let one_list of data.solutions){
+    for(const[i, one_list] of data.solutions.entries()){
         select_list = `<div class="table">`;
+        select_list+=`<p class="table-title">Selection list n&deg;`+(i+1)+`</p>`
         select_list+= table_header;
         for(let one_row of one_list){
             single_row = `<div class="table-row">`;
@@ -775,11 +818,22 @@ function display_results(data) {
             select_list+=single_row;
         }
         select_list+=`</div>`;
-        sample_results.innerHTML+=select_list;
+        if(i<3){
+            sample_results.innerHTML+=select_list;
+        }
+        all_solutions.push(select_list);
     }
     result_section.style.display = "block";
 }
 
 function download_solutions_pdf() {
-    
+    if (all_solutions.length == 0) {
+        notify(1, "The solutions are no more available ...")
+    } else {
+        makeFile.download_solution_as_pdf(all_solutions);
+    }
+}
+
+function download_solutions_excel() {
+    notify(1, "This functionality will be available soon !");
 }
