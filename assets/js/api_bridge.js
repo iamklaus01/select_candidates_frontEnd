@@ -354,7 +354,7 @@ export async function get_all_constraints(c_file_id, token) {
     }
 }
 
-export async function solve(c_file_id, token) {
+export async function solve(c_file_id, limit, token) {
     let header = new Headers();
     header.append('Authorization', 'Bearer '+token);
 
@@ -364,7 +364,33 @@ export async function solve(c_file_id, token) {
         headers: header,
     }
     try{
-        return await fetch( url.SOLVE_URL +"/"+c_file_id, params);
+        return await fetch( url.SOLVE_URL +"/"+c_file_id+"/"+limit, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function save_solution(solutions, c_file_id, nbre_sol, status, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+    header.append('Content-Type', "application/json");
+
+    let body_data = JSON.stringify({
+        encodedFile: solutions,
+        status: status,
+        n_sol: nbre_sol,
+        satisfaction: 80,
+        candidatesFile_id: c_file_id
+    });
+    
+    let params = {
+        method: "POST",
+        mode: "cors",
+        body: body_data,
+        headers: header,
+    }
+    try{
+        return await fetch( url.LOG_SELECTION_FILE_URL, params);
     }catch(error){
         console.log(error)
     }
