@@ -22,6 +22,8 @@ let validation_button=document.getElementById("validation_button");
 
 let result_section = document.getElementById('main-result'); 
 let all_solutions = [];
+let all_solutions_excel = [];
+let all_features = []
 let pdf_download_btn = document.getElementById('btn-pdf-download'); 
 let excel_download_btn = document.getElementById('btn-excel-download'); 
 
@@ -95,7 +97,7 @@ limit_constraint_form.addEventListener('submit', go_to_constraint_validation)
         document.getElementById('progressBar').value = 0;
         const fileSize = inputFile.files.item(0).size;
         const fileMb = fileSize / 1024 ** 2;
-            if (fileMb >= 2) {
+            if (fileMb >= 20) {
                 notify(0, "Please, select a file less than 2MB.")
                 upload_file_btn.disabled = true;
             } else {
@@ -127,7 +129,7 @@ const hideBanners = () => {
 function manage_file_uploaded(e){
     e.preventDefault();
     const file = document.getElementById('c_file').files[0];
-    e.target.reset();
+    e.currentTarget.reset();
     upload_file(file);
 }
 
@@ -262,6 +264,7 @@ async function upload_file(file){
                     upload_file_btn.style.display = 'none';
                 });
             }else{
+                document.getElementById('progressBar').value = 0;
                 if (response.status == 404) {
                     notify(0, "User not found... Make sure you have created an account!")
                 }else if(response.status == 403) {
@@ -273,6 +276,7 @@ async function upload_file(file){
                 }
             }
         } catch (error) {
+            document.getElementById('progressBar').value = 0;
             notify(0, "An error has occured")
             console.log(error);
         }
@@ -444,6 +448,8 @@ async function launch_solving(){
                 console.log(data)
                 stop_progressing();
                 save_solutions(data);
+                all_solutions_excel = data.solutions
+                all_features = data.columns;
                 display_results(data);
                 notify(1, "Resolution completed successfully !")
             });
@@ -465,10 +471,11 @@ async function launch_solving(){
 async function save_solutions(data) {
     try {
         let encoded = encodeURI(JSON.stringify(data.solutions));
+        let encoded_cols = encodeURI(JSON.stringify(data.columns));
         let token = JSON.parse(localStorage.getItem('user')).token;
         let cFile_id = JSON.parse(localStorage.getItem('features')).c_file_id;
     
-        let response = await user.save_solution(encoded, cFile_id, data.number_of_solutions, data.status, token);
+        let response = await user.save_solution(encoded, encoded_cols, cFile_id, data.number_of_solutions, data.status, token);
         if(response.ok){
             let data = response.json();
             data.then((data)=>{
@@ -828,12 +835,85 @@ function display_results(data) {
 
 function download_solutions_pdf() {
     if (all_solutions.length == 0) {
-        notify(1, "The solutions are no more available ...")
+        notify(1, "The solutions are not available ...")
     } else {
         makeFile.download_solution_as_pdf(all_solutions);
     }
 }
 
 function download_solutions_excel() {
-    notify(1, "This functionality will be available soon !");
+    if (all_solutions_excel.length == 0 || all_features.length == 0) {
+        notify(1, "The solutions are not available ...")
+    } else {
+        let formatted_solutions = format_solutions_for_excel(all_solutions_excel)
+        let workbook = XLSX.utils.book_new();
+        for (let i = 0; i < formatted_solutions.length; i++) {
+            let worksheet = XLSX.utils.aoa_to_sheet(formatted_solutions[i]);
+            workbook.SheetNames.push("Selection list "+i);
+            workbook.Sheets["Selection list "+(i+1)] = worksheet;
+        }
+
+        XLSX.writeFile(workbook, "solutions_celect.xlsx");
+    }
+}
+
+function new_download_solutions_excel() {
+    if (all_solutions_excel.length == 0 || all_features.length == 0) {
+        notify(1, "The solutions are not available ...")
+    } else {
+        let formatted_solutions = new_format_solutions_for_excel(all_solutions_excel)
+        let workbook = XLSX.utils.book_new();
+        let worksheet = XLSX.utils.aoa_to_sheet(formatted_solutions);
+        workbook.SheetNames.push("Selection list");
+        workbook.Sheets["Selection list"] = worksheet;
+
+        XLSX.writeFile(workbook, "solutions_celect.xlsx");
+    }
+}
+
+function format_solutions_for_excel(data) {
+    let all_solutions_formatted = [];
+    let one_solution_formatted = [];
+    let single_row = [];
+    
+    for(const one_list of data){
+        one_solution_formatted.push(all_features)
+        for(let one_row of one_list){
+            single_row = [];
+            for (const col of all_features) {
+                single_row.push(one_row[col])
+            }
+            one_solution_formatted.push(single_row)
+        }
+        all_solutions_formatted.push(one_solution_formatted)
+        one_solution_formatted = []
+    }
+    console.log(all_solutions_formatted);
+    return all_solutions_formatted;
+    
+}
+
+function new_format_solutions_for_excel(data) {
+    let all_solutions_formatted = [];
+    let one_solution_formatted = [];
+    let single_row = [];
+    let header = [...all_features]
+    header.push('Liste')
+    one_solution_formatted.push(header)
+    
+    for(const [i,one_list] of data.entries()){
+        for(let one_row of one_list){
+            single_row = [];
+            for (const col of all_features) {
+                single_row.push(one_row[col])
+            }
+            single_row.push(i+1)
+            one_solution_formatted.push(single_row)
+        }
+        all_solutions_formatted.push(one_solution_formatted)
+        one_solution_formatted = []
+    }
+    console.log(all_solutions_formatted);
+    return all_solutions_formatted;
+    
 }
