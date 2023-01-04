@@ -119,6 +119,7 @@
 .table-list .t-inactive {
     color: var(--danger);
 }
+
 .user-delete{
     color: var(--color-white);
     padding: .5rem;
@@ -134,6 +135,12 @@
     border-radius: .2rem;
     background-color: var(--color-dark);
     cursor: pointer;
+}
+.btn-disabled{
+    pointer-events: none !important;
+}
+.btn-disabled i.user-delete{
+    background-color: rgba(220, 53, 69,.5);
 }
 .file-type{
     font-size: 1.5rem;
@@ -336,6 +343,15 @@ form input[type="file"]{
 }
 
 /* Step 2 styles */
+#select-feature{
+    max-height: 17rem;
+    overflow: auto;
+}
+#list_features{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
 .checkbox-list {
     margin: 4rem auto;
     padding: 2rem 1rem 1rem;
@@ -529,7 +545,7 @@ caption{
 .int-input label{
     font-size: 16px;
     margin-right: .5rem;
-    color: var(--color-dark);
+    color: aliceblue;
 }
 .submit-button,
 .submit-button-dark{
@@ -550,6 +566,9 @@ caption{
     margin-top: 1rem;
     background-color:var(--color-dark);
     color:var(--color-white);
+}
+#add-admin .submit-button-dark{
+    margin-left: 1rem;
 }
 .submit-button:hover{
     color: #fff;
@@ -589,7 +608,7 @@ caption{
 .feature-value p{
     font-size: 18px;
     font-family: cursive;
-    color: silver;
+    color: aliceblue;
 }
 .input-select{
     display: flex;
@@ -1049,6 +1068,9 @@ textarea[resize='horizontal'] {
     padding-bottom: .25rem;
     letter-spacing: .04em;
     text-transform: uppercase;
+}
+#add-admin .heading-small{
+    padding-left: 1rem;
 }
 
 /*===== Results section styles=====*/
