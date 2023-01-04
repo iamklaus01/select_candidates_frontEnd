@@ -201,24 +201,23 @@ export async function register_admin(form, token){
     }
 }
 
-export async function delete_account(user_id, email, pwd, token) {
+export async function delete_account(user_id, admin_id, pwd, token) {
     let form_data = new FormData();
     let header = new Headers();
 
-    form_data.append('user_id', user_id);
-    form_data.append('user_email', email);
-    form_data.append('pwd', pwd);
-    //header.append('Authorization', 'Bearer '+token)
+    form_data.append('user_id',  parseInt(user_id));
+    form_data.append('admin_id', parseInt(admin_id));
+    form_data.append('admin_pwd', pwd);
+    header.append('Authorization', 'Bearer '+token)
 
     let params = {
         method: "DELETE",
         mode: "cors",
         body: form_data,
         headers: header,
-        token : token
     }
     try{
-        return await fetch(url.DELETE_ACCOUNT_URL, params);
+        return await fetch(url.DELETE_USER_ACCOUNT, params);
     }catch(error){
         console.log(error)
         if(error.detail){
@@ -370,7 +369,7 @@ export async function solve(c_file_id, limit, token) {
     }
 }
 
-export async function save_solution(solutions, c_file_id, nbre_sol, status, token) {
+export async function save_solution(solutions, columns, c_file_id, nbre_sol, status, token) {
     let header = new Headers();
     header.append('Authorization', 'Bearer '+token);
     header.append('Content-Type', "application/json");
@@ -380,6 +379,7 @@ export async function save_solution(solutions, c_file_id, nbre_sol, status, toke
         status: status,
         n_sol: nbre_sol,
         satisfaction: 80,
+        features: columns,
         candidatesFile_id: c_file_id
     });
     
@@ -391,6 +391,64 @@ export async function save_solution(solutions, c_file_id, nbre_sol, status, toke
     }
     try{
         return await fetch( url.LOG_SELECTION_FILE_URL, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function delete_sol_file(file_id, user_id, pwd, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+    header.append('Content-Type', "application/json");
+
+    let body_data = JSON.stringify({
+        user_pwd: pwd,
+        user_id: parseInt(user_id)
+    });
+
+    let params = {
+        method: "POST",
+        mode: "cors",
+        body : body_data,
+        headers: header
+    }
+    try{
+        return await fetch( url.DELETE_SOLUTION_FILE_URL +"/"+file_id, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function get_selection_file_data(sol_file_id, token) {
+    let header = new Headers();
+    header.append('Authorization', 'Bearer '+token);
+
+    let params = {
+        method: "GET",
+        mode: "cors",
+        headers: header,
+    }
+    try{
+        return await fetch( url.GET_SELECTION_FILE_DATA_URL +"/"+sol_file_id, params);
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export async function get_in_touch(username, email, content){
+    let header = new Headers();
+    let form_data = new FormData();
+    form_data.append('fullname', username)
+    form_data.append('email', email)
+    form_data.append('message', content)
+    let params = {
+        method: "POST",
+        mode: "cors",
+        body: form_data,
+        headers: header,
+    }
+    try{
+        return await fetch( url.GET_IN_TOUCH_URL, params);
     }catch(error){
         console.log(error)
     }
