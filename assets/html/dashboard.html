@@ -8,9 +8,27 @@
     <link rel="stylesheet" href="../css/dashboard-content.css">
     <link rel="stylesheet" href="../css/utils.css">
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <title>Dashboard | CElect</title>
 </head>
     <body>
+        <div class="modal-container">
+            <div class="modal" id="pop-up">
+                <div class="content-wrapper">
+                  <button class="modal-close close">X</button>
+                  <div class="modal-header">
+                    <p>Do you really want to perform this operation?</p>
+                  </div>
+                  <div class="modal-content">
+                    <input type="password" name="admin_pwd" id="admin_pwd" placeholder="Enter your password to confirm">
+                  </div>
+                  <div class="modal-footer">
+                      <button class="action-cancel">Cancel</button>
+                    <button class="action-confirm">Confirm</button>
+                  </div>
+                </div>
+            </div>
+        </div>
         <div class="banners-container">
             <div class="banner error">
               <div class="banner-icon"><i class="fa fa-circle-exclamation" aria-hidden=True></i></div>
@@ -81,7 +99,7 @@
                 <div class="header-title">
                     <h2>  
                         <label for="nav-toggle">
-                            <i class="fas fa-bars" aria-hidden="true"></i>
+                            <i id="reduce-sidebar" class="fa fa-angles-left" aria-hidden="true"></i>
                         </label>
                         Dashboard 
                     </h2>
